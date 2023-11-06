@@ -9,8 +9,8 @@ const LandingPageLayout = () => {
       <div className='bg-white sticky top-0 w-full z-30 h-[70px] flex '>
         <Navbar/>
       </div>
-        <Outlet/>
-        <Footer/>
+      <Outlet/>
+      <Footer/>
     </div>
   )
 }

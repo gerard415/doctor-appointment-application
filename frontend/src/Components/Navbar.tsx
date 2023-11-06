@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   return (
@@ -7,13 +8,13 @@ const Navbar = () => {
             Medicare
         </div>
         <div className='space-x-7 text-[13px] hidden md:inline'>
-          <button>Home</button>
-          <button>Services</button>
-          <button>Find a Doctor</button>
-          <button>Contact</button>
+          <Link to={'/'}>Home</Link>
+          <Link to={'/services'}>Services</Link>
+          <Link to={'/doctors'}>Find a Doctor</Link>
+          <Link to={'/contact'}>Contact</Link>
         </div>
-        <div className='space-x-4 text-[13px] hidden md:inline'>
-          <button className='bg-blue-600 h-[25px] w-[80px] rounded-2xl text-white '>Log in</button>
+        <div className='space-x-4 text-[13px] hidden md:flex'>
+          <button className='bg-blue-600 h-[30px] w-[85px] rounded-2xl text-white '>Log in</button>
           <button>Sign up</button>
         </div>
         <button className='md:hidden'>
