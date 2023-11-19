@@ -1,6 +1,10 @@
 import mongoose, {Schema, model} from "mongoose"
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
-type patientType = {
+export type patientType = {
+    createJWT: () => void,
+    comparePassword: (arg0: string) => boolean,
     name: string,
     email: string,
     password: string,
@@ -56,4 +60,21 @@ const PatientSchema = new Schema<patientType>({
     }]
 })
 
-export  =  model('Patient', PatientSchema)
+//hashing the password using mongoose middleware
+PatientSchema.pre('save', async function(){
+    const salt = await bcrypt.genSalt(10)
+    this.password = await bcrypt.hash(this.password, salt) 
+})
+
+//creating the token using mongoose instance mathods
+PatientSchema.methods.createJWT = function(){
+    return jwt.sign({name: this.name, userId: this._id}, process.env.JWT_SECRET!, {expiresIn: '30d'} )
+}
+
+//comparing passwords 
+PatientSchema.methods.comparePassword = async function(candidatePassword:string){
+    const isMatch = await bcrypt.compare(candidatePassword, this.password)
+    return isMatch
+}
+
+export default model('Patient', PatientSchema)
