@@ -69,7 +69,7 @@ PatientSchema.pre('save', async function(){
 
 //creating the token using mongoose instance mathods
 PatientSchema.methods.createJWT = function(){
-    return jwt.sign({name: this.name, patientId: this._id}, process.env.JWT_SECRET!, {expiresIn: '30d'} )
+    return jwt.sign({name: this.name, patientId: this._id}, process.env.PATIENT_SECRET!, {expiresIn: '30d'} )
 }
 
 //comparing passwords 

@@ -10,10 +10,12 @@ const app:Application = express()
 
 import connectDB from './db/connect'
 
-import authMiddleware from './middleware/authentication'
+import patientAuthMiddleware from './middleware/patientAuthentication'
 
 //routers
 import authRouter from './routes/auth'
+import patientRouter from './routes/patient'
+import doctorRouter from './routes/doctor'
 
 //error handlers
 import notFound from './middleware/not-found'
@@ -28,6 +30,8 @@ app.use(express.urlencoded({ extended: true }));
 
 //routes
 app.use('/auth', authRouter)
+app.use('/patient', patientAuthMiddleware, patientRouter)
+app.use('/doctor', doctorRouter)
 
 //errors
 app.use(notFound)
