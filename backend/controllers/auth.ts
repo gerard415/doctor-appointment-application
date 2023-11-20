@@ -69,15 +69,8 @@ const login  = async (req:Request, res:Response) => {
 }
 
 const logout  = async (req:Request, res:Response) => {
-    res.send('logout')
+    res.cookie('token', '').json(true)
 }
 
-const getProfile  = async (req:Request, res:Response) => {
-    res.send('get profile')
-}
 
-const editProfile  = async (req:Request, res:Response) => {
-    res.send('edit profile')
-}
-
-export {register, login, getProfile, editProfile, logout}
+export {register, login, logout}
