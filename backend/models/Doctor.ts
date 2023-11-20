@@ -77,7 +77,8 @@ const DoctorSchema = new Schema<doctorType>({
     },
     reviews: [{ 
         type: mongoose.Types.ObjectId, 
-        ref: "Review" 
+        ref: "Review",
+        reuired: true
     }],
     averageRating: {
         type: Number,
@@ -94,7 +95,8 @@ const DoctorSchema = new Schema<doctorType>({
     },
     appointments: [{
         type: mongoose.Types.ObjectId,
-        ref: 'Booking'
+        ref: 'Booking',
+        required: true
     }]
     
 })
@@ -107,7 +109,7 @@ DoctorSchema.pre('save', async function(){
 
 //creating the token using mongoose instance mathods
 DoctorSchema.methods.createJWT = function(){
-    return jwt.sign({name: this.name, userId: this._id}, process.env.JWT_SECRET!, {expiresIn: process.env.JWT_LIFETIME} )
+    return jwt.sign({name: this.name, doctorId: this._id}, process.env.JWT_SECRET!, {expiresIn: '30d'} )
 }
 
 //comparing passwords 
