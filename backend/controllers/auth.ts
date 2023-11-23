@@ -69,7 +69,7 @@ const login  = async (req:Request, res:Response) => {
 }
 
 const logout  = async (req:Request, res:Response) => {
-    res.cookie('token', '').json(true)
+    res.cookie('token', '').json('logged out')
 }
 
 

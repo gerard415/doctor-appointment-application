@@ -14,6 +14,7 @@ export type patientType = {
     gender: string,
     bloodtype: string,
     appointments: [Object]
+    _id: number
 }
 
 const PatientSchema = new Schema<patientType>({
