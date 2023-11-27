@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import BadRequestError from '../errors/bad-request';
 import UnauthenticatedError from '../errors/unauthenticated';
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
+import Review, { reviewType } from '../models/Review';
 
 const SECRET: Secret = process.env.DOCTOR_SECRET!
 
@@ -59,7 +60,9 @@ const getDoctorBookings = async (req: Request, res: Response) => {
 }
 
 const getDoctorReviews = async (req: Request, res: Response) => {
-    res.send('get doctor reviews')
+    const {id: doctorId} = req.params
+    const doctorReviews = await Review.find({doctor: doctorId}) as reviewType[]
+    res.status(StatusCodes.OK).json({doctorReviews, count:doctorReviews.length})
 }
 
 
