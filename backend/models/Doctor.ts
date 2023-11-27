@@ -1,6 +1,7 @@
-import mongoose, {Schema, model} from "mongoose"
+import mongoose, {ObjectId, Schema, model} from "mongoose"
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import Review from "./Review"
 
 export type doctorType = {
     createJWT: () => void,
@@ -21,7 +22,8 @@ export type doctorType = {
     averageRating: number,
     totalRatings: number,
     isApproved: string,
-    appointments: [Object]
+    appointments: [Object],
+    _id: number
 }
 
 const DoctorSchema = new Schema<doctorType>({
@@ -56,7 +58,9 @@ const DoctorSchema = new Schema<doctorType>({
         type: String,
     },
     ticketPrice: {
-        type: Number
+        type: Number,
+        default: 1000,
+        required: true
     },
     specialization: {
         type: String,
@@ -78,10 +82,13 @@ const DoctorSchema = new Schema<doctorType>({
     reviews: [{ 
         type: mongoose.Types.ObjectId, 
         ref: "Review",
-        reuired: true
+        required: true,
+        default: []
     }],
     averageRating: {
         type: Number,
+        max: 5,
+        min: 0,
         default: 0
     },
     totalRatings: {

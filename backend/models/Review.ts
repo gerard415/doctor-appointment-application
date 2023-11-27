@@ -1,10 +1,11 @@
 import mongoose, {ObjectId, Schema, model} from "mongoose"
 
-type reviewType = {
+export type reviewType = {
     doctor: ObjectId,
     patient: ObjectId,
-    reviewText: string,
-    rating: Number
+    text: string,
+    rating: number,
+    createdAt: Date
 }
 
 const ReviewSchema = new Schema<reviewType>({
@@ -16,9 +17,9 @@ const ReviewSchema = new Schema<reviewType>({
         type: mongoose.Types.ObjectId,
         ref: "User",
     },
-    reviewText: {
+    text: {
         type: String,
-        required: true,
+        required: [true, 'please add a review text'],
     },
     rating: {
         type: Number,
@@ -29,4 +30,4 @@ const ReviewSchema = new Schema<reviewType>({
     },
 },{ timestamps: true });
 
-export = model('Review', ReviewSchema)
+export default model('Review', ReviewSchema)

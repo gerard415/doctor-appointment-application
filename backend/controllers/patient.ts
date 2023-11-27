@@ -1,9 +1,11 @@
 import {Request, Response} from 'express'
 import Patient, { patientType } from '../models/Patient';
+import Review, { reviewType } from '../models/Review';
 import { StatusCodes } from 'http-status-codes';
 import BadRequestError from '../errors/bad-request';
 import UnauthenticatedError from '../errors/unauthenticated';
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
+import Doctor, { doctorType } from '../models/Doctor';
 
 interface MyUserRequest extends Request {
     user?: any;
@@ -15,7 +17,7 @@ type MyToken = {
     patientId: number
 }
 
-const getPatient = async (req: MyUserRequest, res: Response) => {
+const getPatient = async (req: Request, res: Response) => {
     const {token} = req.cookies
 
     if(token) {
@@ -57,8 +59,44 @@ const getPatientBookings = async (req: Request, res: Response) => {
     res.send('get patients bookings')
 }
 
-const postDoctorReviews = async (req: Request, res: Response) => {
-    res.send('post doctor reviews')
+const createPatientBookings = async (req: Request, res: Response) => {
+    res.send('get patients bookings')
 }
 
-export {getPatient, editPatient, deletePatient, getPatientBookings, postDoctorReviews}
+const postDoctorReviews = async (req: MyUserRequest, res: Response) => {
+    const {id: doctorId} = req.params
+    const {patientId} = req.user
+
+    const {text, rating} = req.body
+
+    if(!text || !rating){
+        throw new BadRequestError('Field cannot be empty')
+    }
+
+    const doctorReview = await Review.create({doctor: doctorId, patient: patientId, ...req.body})
+    const reviews = await Review.find({doctor: doctorId}) as reviewType[]
+    const doc = await Doctor.findById( doctorId ) as doctorType
+
+    const ratingsSum = reviews.reduce((accumulator, currentValue) => accumulator + currentValue.rating,0);
+
+    const aveRating = ratingsSum/(doc.totalRatings + 1)
+    
+    const doctor = await Doctor.findByIdAndUpdate(doctorId,
+        {
+           $push: {
+                reviews: doctorReview._id
+           },
+           $inc: {
+                totalRatings: 1
+           },
+           $set: {
+                averageRating: Math.round(aveRating)
+           }
+        },
+    {new:true});
+    doctor?.save()
+    
+    res.status(StatusCodes.CREATED).json({doctorReview})  
+}
+
+export {getPatient, editPatient, deletePatient, getPatientBookings, postDoctorReviews, createPatientBookings}
