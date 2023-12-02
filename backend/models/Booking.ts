@@ -1,10 +1,11 @@
 import mongoose, {ObjectId, Schema, model} from "mongoose"
 
-type bookingType = {
+export type bookingType = {
     doctor: ObjectId,
     patient: ObjectId,
     ticketPrice: number,
-    appointmentDate: Date,
+    appointmentTime: number,
+    appointmentDate: string,
     status: string
     isPaid: boolean
 }
@@ -24,14 +25,19 @@ const BookingSchema = new Schema<bookingType>({
         type: Number,
         required: true
     },
+    appointmentTime:{
+        type: Number,
+        enum: [8, 10, 12, 14, 16],
+        required: true
+    },
     appointmentDate: {
-        type: Date,
+        type: String,
         required: true
     },
     status: {
         type: String,
         enum: ["pending", "approved", "cancelled"],
-        default: "pending",
+        default: "approved",
     },
     isPaid: {
         type: Boolean,
@@ -39,4 +45,4 @@ const BookingSchema = new Schema<bookingType>({
     },
 },{ timestamps: true })
 
-export = model('Booking', BookingSchema)
+export default model('Booking', BookingSchema)

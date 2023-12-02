@@ -6,6 +6,8 @@ import BadRequestError from '../errors/bad-request';
 import UnauthenticatedError from '../errors/unauthenticated';
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
 import Doctor, { doctorType } from '../models/Doctor';
+import Booking, { bookingType } from '../models/Booking';
+import moment from 'moment'
 
 interface MyUserRequest extends Request {
     user?: any;
@@ -55,12 +57,48 @@ const deletePatient = async (req: Request, res: Response) => {
     }
 }
 
-const getPatientBookings = async (req: Request, res: Response) => {
-    res.send('get patients bookings')
+const getPatientBookings = async (req: MyUserRequest, res: Response) => {
+    const {patientId} = req.user
+    const appointments = await Booking.find({patient:patientId})
+    res.status(StatusCodes.OK).json({appointments})
 }
 
-const createPatientBookings = async (req: Request, res: Response) => {
-    res.send('get patients bookings')
+const createPatientBookings = async (req: MyUserRequest, res: Response) => {
+    const {id: doctorId} = req.params
+    const {patientId} = req.user
+
+    const {appointmentTime, appointmentDate} = req.body
+
+    if(appointmentTime === '' || appointmentDate === ''){
+        throw new BadRequestError('Please select a date and time')
+    }
+    const date = moment(appointmentDate, "DD-MM-YYYY").toISOString()
+    const doc = await Doctor.findById( doctorId )
+
+    const isAppointmentAvailable = await Booking.find({ patient: patientId, doctor: doctorId, appointmentTime: appointmentTime, appointmentDate: date })
+
+    if(isAppointmentAvailable.length === 0){
+        const appointment = await Booking.create({patient:patientId, doctor:doctorId, appointmentTime: appointmentTime, appointmentDate: date, ticketPrice: doc?.ticketPrice})
+
+        const doctor = await Doctor.findByIdAndUpdate(doctorId,
+            {
+               $push: {
+                    appointments: appointment._id
+               },
+            },{new:true});
+        doctor?.save()
+
+        const patient = await Patient.findByIdAndUpdate(patientId,
+            {
+                $push: {
+                    appointments: appointment._id
+                }
+            },{new:true})
+        patient?.save()
+        res.status(StatusCodes.CREATED).json({appointment}) 
+    }else{
+        res.status(StatusCodes.BAD_REQUEST).json({message: 'Appointment time is not available'})
+    }
 }
 
 const postDoctorReviews = async (req: MyUserRequest, res: Response) => {
