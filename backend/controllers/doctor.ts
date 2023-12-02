@@ -5,11 +5,16 @@ import BadRequestError from '../errors/bad-request';
 import UnauthenticatedError from '../errors/unauthenticated';
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
 import Review, { reviewType } from '../models/Review';
+import Booking from '../models/Booking';
 
 const SECRET: Secret = process.env.DOCTOR_SECRET!
 
 type MyToken = {
     doctorId: number
+}
+
+interface MyUserRequest extends Request {
+    user?: any;
 }
 
 const getDoctor = async (req: Request, res: Response) => {
@@ -55,8 +60,10 @@ const deleteDoctor = async (req: Request, res: Response) => {
     }
 }
 
-const getDoctorBookings = async (req: Request, res: Response) => {
-    res.send('get doctors bookings')
+const getDoctorBookings = async (req: MyUserRequest, res: Response) => {
+    const {doctorId} = req.user
+    const appointments = await Booking.find({doctor:doctorId})
+    res.status(StatusCodes.OK).json({appointments})
 }
 
 const getDoctorReviews = async (req: Request, res: Response) => {
