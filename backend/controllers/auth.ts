@@ -4,7 +4,15 @@ import Doctor, { doctorType } from '../models/Doctor'
 import { StatusCodes } from 'http-status-codes'
 import BadRequestError from '../errors/bad-request'
 import UnauthenticatedError from '../errors/unauthenticated'
-import jwt from 'jsonwebtoken'
+import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
+
+type Token = {
+    patientId: number
+    doctorId: number
+}
+
+
+const SECRET: Secret = process.env.PATIENT_SECRET!
 
 const register  = async (req:Request, res:Response) => {
     const {name, email, password, role} = req.body
@@ -72,5 +80,28 @@ const logout  = async (req:Request, res:Response) => {
     res.cookie('token', '').json('logged out')
 }
 
+const getUser  = async (req:Request, res:Response) => {
+    const {token} = req.cookies
 
-export {register, login, logout}
+    if(token) {
+        const decoded = jwt.verify(token, SECRET) as Token
+
+        if('patientId' in decoded){
+            const {patientId} = decoded
+            const {name, email, phone, bloodtype, role, _id:id} = await Patient.findById(patientId) as patientType
+            res.status(StatusCodes.OK).json({name, email, phone, bloodtype, role, _id:id})
+        }
+
+        if('doctorId' in decoded){
+            const {doctorId} = decoded
+            const {name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, role, about, averageRating, totalRatings, _id:id} = await Doctor.findById(doctorId) as doctorType
+            res.status(StatusCodes.OK).json({name, email, phone, ticketPrice, specialization, qualifications, role, experiences, bio, about, averageRating, totalRatings, _id:id})
+        }
+
+    }else{
+        res.json(null)
+    }
+}
+
+
+export {register, login, logout, getUser}

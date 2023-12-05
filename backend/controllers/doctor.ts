@@ -22,8 +22,8 @@ const getDoctor = async (req: Request, res: Response) => {
 
     if(token) {
         const {doctorId} = jwt.verify(token, SECRET) as MyToken
-        const {name, email, phone, role, appointments,reviews, _id:id} = await Doctor.findById(doctorId) as doctorType
-        res.status(StatusCodes.OK).json({name, email, phone, role, appointments, reviews, _id:id})
+        const {name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id} = await Doctor.findById(doctorId) as doctorType
+        res.status(StatusCodes.OK).json({name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id})
     }else{
         res.json(null)
     }

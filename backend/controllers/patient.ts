@@ -24,8 +24,8 @@ const getPatient = async (req: Request, res: Response) => {
 
     if(token) {
         const {patientId} = jwt.verify(token, SECRET) as MyToken
-        const {name, email, phone, role, appointments, _id:id} = await Patient.findById(patientId) as patientType
-        res.status(StatusCodes.OK).json({name, email, phone, role, appointments, _id:id})
+        const {name, email, phone, bloodtype, _id:id} = await Patient.findById(patientId) as patientType
+        res.status(StatusCodes.OK).json({name, email, phone, bloodtype, _id:id})
     }else{
         res.json(null)
     }

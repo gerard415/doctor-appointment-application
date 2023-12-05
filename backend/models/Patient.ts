@@ -11,7 +11,6 @@ export type patientType = {
     phone: number,
     photo: string,
     role: 'patient',
-    gender: string,
     bloodtype: string,
     appointments: [Object]
     _id: number
@@ -47,10 +46,6 @@ const PatientSchema = new Schema<patientType>({
     },
     role: {
         type: String,
-    },
-    gender: {
-        type: String,
-        enum: ["male", "female", "other"]
     },
     bloodtype: {
         type: String
