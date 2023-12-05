@@ -7,10 +7,12 @@ import FindDoctorPage from './Pages/FindDoctorPage';
 import ContactPage from './Pages/ContactPage';
 import LoginPage from './Pages/LoginPage';
 import RegisterPage from './Pages/RegisterPage';
-import ProfilePage from './Pages/ProfilePage';
+import PatientBookingsPage from './Pages/PatientBookingsPage';
 import axios from 'axios'
 import UserContextProvider from './UserContext';
 import DoctorDashboard from './Pages/DoctorDashboard';
+import ProfilePageLayout from './Components/ProfilePageLayout';
+import PatientSettingsPage from './Pages/PatientSettingsPage';
 
 axios.defaults.baseURL = 'http://localhost:5000'
 axios.defaults.withCredentials = true
@@ -26,7 +28,10 @@ function App() {
           <Route path='/contact' element={<ContactPage/>} />
           <Route path='/login' element={<LoginPage/>} />
           <Route path='/register' element={<RegisterPage/>} />
-          <Route path='/profile' element={<ProfilePage/>}/>
+          <Route path='/profile' element={<ProfilePageLayout/>}>
+            <Route index element={<PatientBookingsPage/>}/>
+            <Route path='/profile/settings' element={<PatientSettingsPage/>}/>
+          </Route>
         </Route>
 
         <Route path='doctordashboard' element={<DoctorDashboard/>}/>
