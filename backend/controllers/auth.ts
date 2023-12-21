@@ -73,7 +73,15 @@ const login  = async (req:Request, res:Response) => {
 
     //creating the token
     const token = user.createJWT()
-    res.status(StatusCodes.OK).cookie('token', token).json({ name: user.name, email: user.email, role: user.role, id:user._id})
+    
+    if(user === patient){
+        res.status(StatusCodes.OK).cookie('token', token).json({ name: user.name, email: user.email, role: user.role, id:user._id, phone: user.phone, bloodtype: patient?.bloodtype})
+    }
+
+    if(user === doctor){
+        res.status(StatusCodes.OK).cookie('token', token).json({ name: user.name, email: user.email, role: user.role, id:user._id, phone: user.phone})
+    }
+    
 }
 
 const logout  = async (req:Request, res:Response) => {

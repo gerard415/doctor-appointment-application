@@ -1,6 +1,6 @@
 export type UserProps = {
-    user: patientStateProps | doctorStateProps | null,
-    setUser: React.Dispatch<React.SetStateAction<patientStateProps | doctorStateProps | userStateProps | null>>,
+    user: userStateProps | null,
+    setUser: React.Dispatch<React.SetStateAction<userStateProps | null>>,
     ready: boolean,
     redirect: boolean,
     setRedirect: React.Dispatch<React.SetStateAction<boolean>>,
@@ -17,7 +17,7 @@ export type patientStateProps = {
 
 export type doctorStateProps = {
     name: string,
-    email: string,
+    email: string
     id: string,
     phone?: number,
     ticketPrice: number,
@@ -36,4 +36,7 @@ export type userStateProps = {
     email: string
     role: string
     id: string
+    bloodtype: string
+    phone: number
+    photo?: string
 }

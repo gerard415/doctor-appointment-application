@@ -48,7 +48,8 @@ const PatientSchema = new Schema<patientType>({
         type: String,
     },
     bloodtype: {
-        type: String
+        type: String,
+        default: ''
     },
     appointments: [{
         type: mongoose.Types.ObjectId,

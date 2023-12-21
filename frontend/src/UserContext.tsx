@@ -9,7 +9,7 @@ type UserContextProviderProps = {
 }
 
 const UserContextProvider = ({children}: UserContextProviderProps) => {
-    const [user, setUser] = useState<patientStateProps | doctorStateProps| userStateProps | null>(null)
+    const [user, setUser] = useState<userStateProps | null>(null)
     const [ready, setReady] = useState(false)
     const [redirect,setRedirect] = useState<boolean>(false);
 
