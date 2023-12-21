@@ -13,6 +13,9 @@ import UserContextProvider from './UserContext';
 import DoctorDashboard from './Pages/DoctorDashboard';
 import ProfilePageLayout from './Components/ProfilePageLayout';
 import PatientSettingsPage from './Pages/PatientSettingsPage';
+import SingleDoctorPageLayout from './Components/SingleDoctorPageLayout';
+import SingleDoctorAboutPage from './Pages/SingleDoctorAboutPage';
+import SingleDoctorFeedbackPage from './Pages/SingleDoctorFeedbackPage';
 
 axios.defaults.baseURL = 'http://localhost:5000'
 axios.defaults.withCredentials = true
@@ -25,6 +28,10 @@ function App() {
           <Route index element={<HomePage/>} />
           <Route path='/services' element={<ServicesPage/>} />
           <Route path='/doctors' element={<FindDoctorPage/>} />
+          <Route path='/doctors/:id' element={<SingleDoctorPageLayout/>}>
+            <Route index element={<SingleDoctorAboutPage/>}/>
+            <Route path='/doctors/:id/feedback' element={<SingleDoctorFeedbackPage/>}/>
+          </Route>
           <Route path='/contact' element={<ContactPage/>} />
           <Route path='/login' element={<LoginPage/>} />
           <Route path='/register' element={<RegisterPage/>} />

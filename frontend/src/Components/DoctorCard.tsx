@@ -1,6 +1,7 @@
 import React from 'react'
 import {AiOutlineArrowRight} from 'react-icons/ai'
 import image from '../assets/images/doctor.jpeg'
+import { Link } from 'react-router-dom'
 
 const DoctorCard = () => {
   return (
@@ -26,9 +27,9 @@ const DoctorCard = () => {
             </div>
             <div className='flex justify-between items-center'>
                 <p className='text-[10px] flex justify-center items-center  text-gray-500'>At Mount Adora Hospital Sylnet</p>
-                <div className='w-[30px] h-[30px] rounded-full border border-solid flex items-center justify-center '>
+                <Link to={'/doctors/1'} className='w-[30px] h-[30px] rounded-full border border-solid flex items-center justify-center '>
                     <AiOutlineArrowRight/>
-                </div>
+                </Link>
             </div>
         </div>
     </div>
