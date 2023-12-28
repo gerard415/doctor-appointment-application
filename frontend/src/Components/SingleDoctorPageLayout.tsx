@@ -5,7 +5,7 @@ import { Link, NavLink, Outlet } from 'react-router-dom'
 const SingleDoctorPageLayout = () => {
   return (
     <div className='flex justify-center'>
-        <div className='border border-black w-[600px] h-[700px] '>
+        <div className=' w-[600px] '>
             <div className='h-[200px] flex space-x-3'>
                 <div className='  '>
                     <img src={image} alt="" className='h-[160px] w-[160px]  rounded-md ' />
@@ -34,11 +34,19 @@ const SingleDoctorPageLayout = () => {
             <div>
                 <div>
                     <div className='flex mb-2'>
-                        <NavLink to={'/doctors/1'} className ={({isActive, isPending}) => isPending? 'text-[11px] text-center w-[100px] font-bold' :  isActive ? 'text-[11px] text-center w-[100px] font-bold border border-b-gray-500' : '' }>
-                            About
+                        <NavLink to={'/doctors/1'}  end>
+                            {({ isActive}) => (
+                                <div className='text-[11px] text-center w-[100px] font-bold' >
+                                    <span className={isActive ? "text-blue-500" : ""}>About</span>
+                                </div>
+                            )}
                         </NavLink>
-                        <NavLink to={'/doctors/1/feedback'} className ={({isActive}) => isActive ? 'text-[11px] text-center w-[100px] font-bold border border-b-gray-500' : 'text-[11px] text-center w-[100px] font-bold' }>
-                            Feedback
+                        <NavLink to={'/doctors/1/feedback'}>
+                            {({ isActive}) => (
+                                <div className='text-[11px] text-center w-[100px] font-bold' >
+                                    <span className={isActive ? "text-blue-500" : ""}>Feedback</span>
+                                </div>
+                            )}
                         </NavLink>   
                     </div>
                     <hr />
@@ -48,8 +56,29 @@ const SingleDoctorPageLayout = () => {
                 </div>
             </div>
         </div>
-        <div className='border border-black w-[300px] h-[250px] '>
-
+        <div className=' w-[270px] h-full space-y-5 p-2 pt-4 pb-4 shadow-2xl'>
+            <div className='flex justify-between'>
+                <p className='text-[13px] text-gray-500 '>Ticket Price</p>
+                <p className=' text-[15px] font-bold '>700 BDT</p>
+            </div>
+            <div className='space-y-2'>
+                <p className='text-[13px] '>Avaialble Time Slots</p>
+                <div className='space-y-2' >
+                    <div className='flex justify-between text-[13px] text-gray-500 '>
+                        <p>Sunday:</p>
+                        <p>4:30pm - 9:30pm</p>
+                    </div>
+                    <div className='flex justify-between text-[13px] text-gray-500 '>
+                        <p>Monday:</p>
+                        <p>4:30pm - 9:30pm</p>
+                    </div>
+                    <div className='flex justify-between text-[13px] text-gray-500 '>
+                        <p>Friday:</p>
+                        <p>4:30pm - 9:30pm</p>
+                    </div>
+                </div>
+            </div>
+            <button className=' bg-blue-600 w-full h-[45px] text-white text-[12px] rounded-md '>Book Appointment</button>
         </div>
     </div>
   )
