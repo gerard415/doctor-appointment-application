@@ -4,9 +4,6 @@ import ReviewCard from '../Components/ReviewCard'
 const SingleDoctorFeedbackPage = () => {
     const [giveReview, setGiveReview] = useState(false)
 
-    const giveFeedback = () => {
-        setGiveReview(true)
-    }
     return (
         <div className='space-y-5'>
             <p className='pt-7 text-[13px] font-semibold tracking-wide '>All Reviews (2)</p>
@@ -17,7 +14,7 @@ const SingleDoctorFeedbackPage = () => {
             <div className='py-7 '>
                 {!giveReview? 
                     <div className='text-center'>
-                        <button className=' bg-blue-600 p-3 px-4 text-white text-[12px] rounded-3xl' onClick={() => giveFeedback()}>Give Feedback</button>
+                        <button className=' bg-blue-600 p-3 px-4 text-white text-[12px] rounded-3xl' onClick={() => setGiveReview(!giveReview)}>Give Feedback</button>
                     </div>
                     :
                     <div className='text-[11px] space-y-4 '>

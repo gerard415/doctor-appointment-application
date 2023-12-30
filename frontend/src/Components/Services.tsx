@@ -3,7 +3,7 @@ import React from 'react'
 const Services = () => {
   return (
     <div className="">
-        <div className=" flex flex-col ">
+        <div className=" flex flex-col galaxyfold:px-7 phone:px-0">
             <header className="text-center mx-auto mb-12 lg:px-20">
                 <h2 className="text-[19px] leading-normal mb-2 font-bold text-black">Our Medical Services</h2>
                 <p className="text-gray-500 leading-relaxed font-light mx-auto pb-2 text-[13px] ">

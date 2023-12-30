@@ -7,7 +7,7 @@ import NationsBest from '../Components/NationsBest'
 
 const HomePage = () => {
   return (
-    <div className='space-y-[100px] phone:px-10 lg:px-24 '>
+    <div className='space-y-[100px] phone:px-10 lg:px-24 galaxyfold:px-7 '>
         {/* <HeroSection/> */}
         <ProvideMedicalServices/>
         <NationsBest/>
