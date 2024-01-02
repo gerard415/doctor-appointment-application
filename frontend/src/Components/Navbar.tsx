@@ -53,9 +53,9 @@ const Navbar = () => {
               
           </div>
         : <div className='flex'>
-            <div className='space-x-2 galaxyfold:text-[11px] text-[13px] hidden sm:flex'>
-              <Link to={'/login'} className='bg-blue-600 h-[30px] w-[85px] galaxyfold:w-[65px] galaxyfold:h-[23px]  rounded-2xl text-white flex justify-center items-center '>Log in</Link>
-              <Link to={'/register'} className='flex justify-center items-center sm:text-[11px] '>Sign up</Link>
+            <div className='space-x-2 galaxyfold:text-[11px] sm:text-[13px] hidden sm:flex'>
+              <Link to={'/login'} className='bg-blue-600 sm:h-[30px] sm:w-[85px] galaxyfold:w-[65px] galaxyfold:h-[23px]  rounded-2xl text-white flex justify-center items-center '>Log in</Link>
+              <Link to={'/register'} className='flex justify-center items-center '>Sign up</Link>
             </div>
             <button className='sm:hidden' onClick={() => setShowMenu(!showMenu)}>
               {!showMenu ? 
