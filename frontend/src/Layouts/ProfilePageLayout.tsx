@@ -3,7 +3,7 @@ import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
 import { UserContext } from '../UserContext'
 import { UserProps } from '../types'
 import axios from 'axios';
-import Loading from './Loading';
+import Loading from '../Components/Loading';
 
 const ProfilePageLayout = () => {
     const {setUser, ready, user}: UserProps = useContext(UserContext)

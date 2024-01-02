@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './Pages/HomePage';
-import LandingPageLayout from './Components/LandingPageLayout';
+import LandingPageLayout from './Layouts/LandingPageLayout';
 import ServicesPage from './Pages/ServicesPage';
 import FindDoctorPage from './Pages/FindDoctorPage';
 import ContactPage from './Pages/ContactPage';
@@ -11,9 +11,9 @@ import PatientBookingsPage from './Pages/PatientBookingsPage';
 import axios from 'axios'
 import UserContextProvider from './UserContext';
 import DoctorDashboard from './Pages/DoctorDashboard';
-import ProfilePageLayout from './Components/ProfilePageLayout';
+import ProfilePageLayout from './Layouts/ProfilePageLayout';
 import PatientSettingsPage from './Pages/PatientSettingsPage';
-import SingleDoctorPageLayout from './Components/SingleDoctorPageLayout';
+import SingleDoctorPageLayout from './Layouts/SingleDoctorPageLayout';
 import SingleDoctorAboutPage from './Pages/SingleDoctorAboutPage';
 import SingleDoctorFeedbackPage from './Pages/SingleDoctorFeedbackPage';
 
