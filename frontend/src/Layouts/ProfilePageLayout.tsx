@@ -20,6 +20,14 @@ const ProfilePageLayout = () => {
         return <Loading/>
     }
 
+    if(ready && !user){
+        return <Navigate to={'/login'} />
+    }
+
+    if(ready && user && user.role === 'doctor'){
+        return <Navigate to={'/doctor-profile'} />
+    }
+
     const handleLogout = async () => {
         await axios.post('/auth/logout')
         setUser(null)

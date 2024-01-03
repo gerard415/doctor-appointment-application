@@ -35,7 +35,7 @@ const RegisterPage= () => {
       }
   
       if(user?.role === 'doctor'){
-          return <Navigate to={'/doctordashboard'}/>
+          return <Navigate to={'/doctor-profile'}/>
       }
   }
 

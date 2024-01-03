@@ -10,12 +10,15 @@ import RegisterPage from './Pages/RegisterPage';
 import PatientBookingsPage from './Pages/PatientBookingsPage';
 import axios from 'axios'
 import UserContextProvider from './UserContext';
-import DoctorDashboard from './Pages/DoctorDashboard';
 import ProfilePageLayout from './Layouts/ProfilePageLayout';
 import PatientSettingsPage from './Pages/PatientSettingsPage';
 import SingleDoctorPageLayout from './Layouts/SingleDoctorPageLayout';
 import SingleDoctorAboutPage from './Pages/SingleDoctorAboutPage';
 import SingleDoctorFeedbackPage from './Pages/SingleDoctorFeedbackPage';
+import DoctorProfileLayout from './Layouts/DoctorProfileLayout';
+import DoctorProfileOverview from './Pages/DoctorProfileOverviewPage';
+import DoctorProfileAppointmentPage from './Pages/DoctorProfileAppointmentPage';
+import DoctorProfilePage from './Pages/DoctorProfilePage';
 
 axios.defaults.baseURL = 'http://localhost:5000'
 axios.defaults.withCredentials = true
@@ -39,9 +42,12 @@ function App() {
             <Route index element={<PatientBookingsPage/>}/>
             <Route path='/profile/settings' element={<PatientSettingsPage/>}/>
           </Route>
+          <Route path='/doctor-profile' element={<DoctorProfileLayout/>} >
+            <Route index element={<DoctorProfileOverview/>} />
+            <Route path='/doctor-profile/appointments' element={<DoctorProfileAppointmentPage/>} />
+            <Route path='/doctor-profile/me' element={<DoctorProfilePage/>} />
+          </Route>
         </Route>
-
-        <Route path='doctordashboard' element={<DoctorDashboard/>}/>
       </Routes>
     </UserContextProvider>
   );
