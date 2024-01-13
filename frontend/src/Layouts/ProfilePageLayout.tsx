@@ -43,18 +43,23 @@ const ProfilePageLayout = () => {
             <div className=' galaxyfold:px-7 middle:px-10 lg:px-24 md:flex md:space-x-10 lg:space-x-[100px]  md:space-y-0 '>
                 <div className='h-[300px] w-[200px] md:flex flex-col items-center justify-between hidden'>
                     <div className='flex items-center flex-col space-y-1'>
-                        <div className='flex justify-center bg-gray-500 text-white rounded-full border border-gray-500 overflow-hidden h-[50px] w-[50px] '>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-[50px] w-[50px] relative top-1">
-                                <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
-                            </svg>
-                        </div>
+                        {user?.photo ? 
+                            <img src={user.photo}  alt="" className='rounded-full h-[50px] w-[50px] ' /> :
+                            
+                            <div className='flex justify-center bg-gray-500 text-white rounded-full border border-gray-500 overflow-hidden h-[50px] w-[50px] '>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-[50px] w-[50px] relative top-1">
+                                    <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                        }
+                        
                         <p className='font-bold text-[10px] text-center'>{user?.name}</p>
                         <p className='text-[10px] text-center'>{user?.email}</p>
                         <p className='text-[10px] text-center'>Blood Type: <span className='font-bold'>{user?.bloodtype}</span></p>
                     </div>
                     <div className='flex flex-col space-y-2'>
                         <button className='bg-black text-white h-[30px] text-[11px] text-center flex items-center justify-center rounded-[4px] w-[200px] ' onClick={handleLogout}>Logout</button>
-                        <button className='bg-red-500 text-white h-[30px] text-[11px] text-center flex items-center justify-center rounded-[4px] w-[200px]'>Delete Account</button>
+                        <button className='bg-red-500 text-white h-[30px] text-[11px] text-center flex items-center justify-center rounded-[4px] w-[200px]' onClick={() => console.log(user)}>Delete Account</button>
                         
                     </div>
                 </div>
@@ -68,18 +73,22 @@ const ProfilePageLayout = () => {
                         openMenu ? 
                         <div className='space-y-2'>
                             <div className='flex items-center flex-col space-y-2 '>
-                                <div className='flex justify-center bg-gray-500 text-white rounded-full border border-gray-500 overflow-hidden h-[50px] w-[50px] '>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-[50px] w-[50px] relative top-1">
-                                        <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
-                                    </svg>
-                                </div>
+                                {user?.photo ? 
+                                    <img src={user.photo}  alt="" className='rounded-full h-[50px] w-[50px] ' /> :
+                                    
+                                    <div className='flex justify-center bg-gray-500 text-white rounded-full border border-gray-500 overflow-hidden h-[50px] w-[50px] '>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-[50px] w-[50px] relative top-1">
+                                            <path fillRule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clipRule="evenodd" />
+                                        </svg>
+                                    </div>
+                                }
                                 <p className='font-bold text-[10px] text-center'>{user?.name}</p>
                                 <p className='text-[10px] text-center'>{user?.email}</p>
                                 <p className='text-[10px] text-center'>Blood Type: <span className='font-bold'>{user?.bloodtype}</span></p>
                             </div>
                             <div className='flex flex-col space-y-2'>
                                 <button className='bg-black text-white h-[30px] text-[11px] text-center flex items-center justify-center rounded-[4px] w-full ' onClick={handleLogout}>Logout</button>
-                                <button className='bg-red-500 text-white h-[30px] text-[11px] text-center flex items-center justify-center rounded-[4px] w-full'>Delete Account</button>
+                                <button className='bg-red-500 text-white h-[30px] text-[11px] text-center flex items-center justify-center rounded-[4px] w-full' onClick={() => console.log(user?.photo)}>Delete Account</button>
                                 
                             </div>
                         </div> :

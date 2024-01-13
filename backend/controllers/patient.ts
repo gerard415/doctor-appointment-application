@@ -43,8 +43,8 @@ const editPatient = async (req: Request, res: Response) => {
         const {patientId} = jwt.verify(token, SECRET) as MyToken
         const user = await Patient.findOneAndUpdate({_id: patientId}, {...req.body}, {new:true, runValidators:true})
         user?.save()
-        const {name, email, phone, role, appointments, _id:id, bloodtype} = user as patientType
-        res.status(StatusCodes.OK).json({name, email, phone, role, appointments, _id:id, bloodtype})
+        const {name, email, phone, role, appointments, _id:id, bloodtype, photo} = user as patientType
+        res.status(StatusCodes.OK).json({name, email, phone, role, appointments, _id:id, bloodtype, photo})
     }
 }
 

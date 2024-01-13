@@ -21,7 +21,7 @@ const UserContextProvider = ({children}: UserContextProviderProps) => {
                 setReady(true)
             }).catch((err) => err)
         }
-    })
+    },[user])
 
     return (
         <UserContext.Provider value={{user, setUser, ready, redirect, setRedirect}}>

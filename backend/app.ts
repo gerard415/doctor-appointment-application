@@ -25,7 +25,7 @@ import errorHandlerMiddleware from './middleware/errorHandler'
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(express.json());
 app.use(cookieParser())
-// app.use('/uploads', express.static('C:/Users/gerar/Programming/typescript/inventory manageement application/inventory-management-application/backend' + '/uploads'))
+app.use('/uploads', express.static('C:/Users/gerar/Programming/typescript/doctor-appointment-application/backend' + '/uploads'))
 app.use(express.urlencoded({ extended: true }));
 
 //routes

@@ -5,10 +5,11 @@ import {getDoctor, getAllDoctors, editDoctor, deleteDoctor, getDoctorBookings, g
 import doctorAuthMiddleware = require('../middleware/doctorAuthentication')
 import { postDoctorReviews, createPatientBookings } from '../controllers/patient'
 import patientAuthMiddleware from '../middleware/patientAuthentication'
+import { photoMiddleware } from '../utils/multer'
 
 router.get('/profile', getDoctor)
 router.get('/', getAllDoctors)
-router.patch('/profile', doctorAuthMiddleware, editDoctor)
+router.patch('/profile',photoMiddleware.single('photo'), doctorAuthMiddleware, editDoctor)
 router.delete('/profile', doctorAuthMiddleware, deleteDoctor)
 router.get('/bookings', doctorAuthMiddleware, getDoctorBookings)
 router.get('/:id/reviews', getDoctorReviews)

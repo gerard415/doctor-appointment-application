@@ -39,4 +39,10 @@ export type userStateProps = {
     bloodtype: string
     phone: number
     photo?: string
+    appointments?: [Object] 
+}
+
+export type imageProps = {
+    fileName: string,
+    filePath: string
 }

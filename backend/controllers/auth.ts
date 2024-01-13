@@ -5,12 +5,14 @@ import { StatusCodes } from 'http-status-codes'
 import BadRequestError from '../errors/bad-request'
 import UnauthenticatedError from '../errors/unauthenticated'
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
+import { fileSizeFormatter } from '../utils/multer'
+import cloudinary from '../utils/cloudinary'
+
 
 type Token = {
     patientId: number
     doctorId: number
 }
-
 
 const SECRET: Secret = process.env.PATIENT_SECRET!
 
@@ -96,14 +98,14 @@ const getUser  = async (req:Request, res:Response) => {
 
         if('patientId' in decoded){
             const {patientId} = decoded
-            const {name, email, phone, bloodtype, role, _id:id} = await Patient.findById(patientId) as patientType
-            res.status(StatusCodes.OK).json({name, email, phone, bloodtype, role, _id:id})
+            const {name, email, phone, bloodtype, role, _id:id, photo} = await Patient.findById(patientId) as patientType
+            res.status(StatusCodes.OK).json({name, email, phone, bloodtype, role, _id:id, photo})
         }
 
         if('doctorId' in decoded){
             const {doctorId} = decoded
-            const {name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, role, about, averageRating, totalRatings, _id:id} = await Doctor.findById(doctorId) as doctorType
-            res.status(StatusCodes.OK).json({name, email, phone, ticketPrice, specialization, qualifications, role, experiences, bio, about, averageRating, totalRatings, _id:id})
+            const {name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, role, about, averageRating, totalRatings, _id:id, photo} = await Doctor.findById(doctorId) as doctorType
+            res.status(StatusCodes.OK).json({name, email, phone, ticketPrice, specialization, qualifications, role, experiences, bio, about, averageRating, totalRatings, _id:id, photo})
         }
 
     }else{
@@ -111,5 +113,29 @@ const getUser  = async (req:Request, res:Response) => {
     }
 }
 
+const upload = async (req:Request, res:Response) => {
+    let fileData = [];
+    if (req.file) {
+    // Save image to cloudinary
+    let uploadedFile 
+        try {
+            const localFilePath = req.file.path
+            uploadedFile = await cloudinary.uploader.upload(localFilePath, {
+                folder: "products",
+                resource_type: "image",
+            })
+            fileData.push({
+                fileName: req.file.originalname,
+                filePath: uploadedFile.secure_url,
+            })
 
-export {register, login, logout, getUser}
+        } catch (error) {
+            res.status(500);
+            throw new Error('Image could not be Uploaded');
+        }
+    }
+    res.json(fileData) 
+}
+
+
+export {register, login, logout, getUser, upload}
