@@ -19,37 +19,41 @@ import DoctorProfileLayout from './Layouts/DoctorProfileLayout';
 import DoctorProfileOverview from './Pages/DoctorProfileOverviewPage';
 import DoctorProfileAppointmentPage from './Pages/DoctorProfileAppointmentPage';
 import DoctorProfilePage from './Pages/DoctorProfilePage';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 axios.defaults.baseURL = 'http://localhost:5000'
 axios.defaults.withCredentials = true
 
 function App() {
   return (
-    <UserContextProvider>
-      <Routes>
-        <Route path='/' element={<LandingPageLayout/>} >
-          <Route index element={<HomePage/>} />
-          <Route path='/services' element={<ServicesPage/>} />
-          <Route path='/doctors' element={<FindDoctorPage/>} />
-          <Route path='/doctors/:id' element={<SingleDoctorPageLayout/>}>
-            <Route index element={<SingleDoctorAboutPage/>}/>
-            <Route path='/doctors/:id/feedback' element={<SingleDoctorFeedbackPage/>}/>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <UserContextProvider>
+        <Routes>
+          <Route path='/' element={<LandingPageLayout/>} >
+            <Route index element={<HomePage/>} />
+            <Route path='/services' element={<ServicesPage/>} />
+            <Route path='/doctors' element={<FindDoctorPage/>} />
+            <Route path='/doctors/:id' element={<SingleDoctorPageLayout/>}>
+              <Route index element={<SingleDoctorAboutPage/>}/>
+              <Route path='/doctors/:id/feedback' element={<SingleDoctorFeedbackPage/>}/>
+            </Route>
+            <Route path='/contact' element={<ContactPage/>} />
+            <Route path='/login' element={<LoginPage/>} />
+            <Route path='/register' element={<RegisterPage/>} />
+            <Route path='/profile' element={<ProfilePageLayout/>}>
+              <Route index element={<PatientBookingsPage/>}/>
+              <Route path='/profile/settings' element={<PatientSettingsPage/>}/>
+            </Route>
+            <Route path='/doctor-profile' element={<DoctorProfileLayout/>} >
+              <Route index element={<DoctorProfileOverview/>} />
+              <Route path='/doctor-profile/appointments' element={<DoctorProfileAppointmentPage/>} />
+              <Route path='/doctor-profile/me' element={<DoctorProfilePage/>} />
+            </Route>
           </Route>
-          <Route path='/contact' element={<ContactPage/>} />
-          <Route path='/login' element={<LoginPage/>} />
-          <Route path='/register' element={<RegisterPage/>} />
-          <Route path='/profile' element={<ProfilePageLayout/>}>
-            <Route index element={<PatientBookingsPage/>}/>
-            <Route path='/profile/settings' element={<PatientSettingsPage/>}/>
-          </Route>
-          <Route path='/doctor-profile' element={<DoctorProfileLayout/>} >
-            <Route index element={<DoctorProfileOverview/>} />
-            <Route path='/doctor-profile/appointments' element={<DoctorProfileAppointmentPage/>} />
-            <Route path='/doctor-profile/me' element={<DoctorProfilePage/>} />
-          </Route>
-        </Route>
-      </Routes>
-    </UserContextProvider>
+        </Routes>
+      </UserContextProvider>
+    </LocalizationProvider>
   );
 }
 

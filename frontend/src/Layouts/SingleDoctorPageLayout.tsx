@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import image from '../assets/images/doctor.jpeg'
 import { Link, NavLink, Outlet } from 'react-router-dom'
+import BookingComponent from '../Components/BookingComponent'
 
 const SingleDoctorPageLayout = () => {
-  return (
-    <div className='flex justify-center galaxyfold:px-7 middle:px-10 '>
-        <div className=' w-[600px] '>
-            <div>
+    const [formattedDate, setFormattedDate] = useState<string | null>(null)
+    const [currentSelect, setCurrentSelect] = useState<string | null>(null)
+    const [selectedTime, setSelectedTime] = useState<number | null>(null)
+
+
+    return (
+        <div className='md:flex justify-center middle:px-10 lg:px-24 galaxyfold:px-7  '>
+            <div className=' md:w-[500px] lg:w-[700px]'>
                 <div className='h-[200px] flex space-x-3'>
                     <div className='  '>
                         <img src={image} alt="" className='h-[160px] w-[250px] middle:w-[200px] md:w-[160px]  rounded-md ' />
@@ -57,57 +62,22 @@ const SingleDoctorPageLayout = () => {
                     </div>
                 </div>
             </div>
-            <div className=' w-full middle:px-7 space-y-5 p-2 pt-4 mt-7 border border-t-gray-100 pb-4 shadow-2xl block md:hidden'>
+            <div className=' md:w-[300px] h-full space-y-5 p-2 pt-4 pb-4 shadow-2xl '>
                 <div className='flex justify-between'>
                     <p className='text-[13px] text-gray-500 '>Ticket Price</p>
                     <p className=' text-[15px] font-bold '>700 BDT</p>
                 </div>
                 <div className='space-y-2'>
-                    <p className='text-[13px] '>Avaialble Time Slots</p>
-                    <div className='space-y-2' >
-                        <div className='flex justify-between text-[13px] text-gray-500 '>
-                            <p>Sunday:</p>
-                            <p>4:30pm - 9:30pm</p>
-                        </div>
-                        <div className='flex justify-between text-[13px] text-gray-500 '>
-                            <p>Monday:</p>
-                            <p>4:30pm - 9:30pm</p>
-                        </div>
-                        <div className='flex justify-between text-[13px] text-gray-500 '>
-                            <p>Friday:</p>
-                            <p>4:30pm - 9:30pm</p>
-                        </div>
-                    </div>
+                        <BookingComponent 
+                            formattedDate={formattedDate} setFormattedDate={setFormattedDate} 
+                            currentSelect={currentSelect} setCurrentSelect={setCurrentSelect}
+                            selectedTime={selectedTime} setSelectedTime={setSelectedTime}
+                        />
                 </div>
-                <button className=' bg-blue-600 w-full h-[45px] text-white text-[12px] rounded-md '>Book Appointment</button>
+                <button className=' bg-blue-600 w-full h-[45px] text-white text-[12px] rounded-md ' onClick={() => console.log(formattedDate, currentSelect, selectedTime)}>Book Appointment</button>
             </div>
         </div>
-        <div className=' w-[270px] h-full space-y-5 p-2 pt-4 pb-4 shadow-2xl hidden md:block '>
-            <div className='flex justify-between'>
-                <p className='text-[13px] text-gray-500 '>Ticket Price</p>
-                <p className=' text-[15px] font-bold '>700 BDT</p>
-            </div>
-            <div className='space-y-2'>
-                <p className='text-[13px] '>Avaialble Time Slots</p>
-                <div className='space-y-2' >
-                    <div className='flex justify-between text-[13px] text-gray-500 '>
-                        <p>Sunday:</p>
-                        <p>4:30pm - 9:30pm</p>
-                    </div>
-                    <div className='flex justify-between text-[13px] text-gray-500 '>
-                        <p>Monday:</p>
-                        <p>4:30pm - 9:30pm</p>
-                    </div>
-                    <div className='flex justify-between text-[13px] text-gray-500 '>
-                        <p>Friday:</p>
-                        <p>4:30pm - 9:30pm</p>
-                    </div>
-                </div>
-            </div>
-            <button className=' bg-blue-600 w-full h-[45px] text-white text-[12px] rounded-md '>Book Appointment</button>
-        </div>
-    </div>
-  )
+    )
 }
 
 export default SingleDoctorPageLayout

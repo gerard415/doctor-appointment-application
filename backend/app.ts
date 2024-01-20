@@ -20,6 +20,7 @@ import doctorRouter from './routes/doctor'
 //error handlers
 import notFound from './middleware/not-found'
 import errorHandlerMiddleware from './middleware/errorHandler'
+import doctorAuthMiddleware from './middleware/doctorAuthentication'
 
 //middleware
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
@@ -31,7 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 //routes
 app.use('/auth', authRouter)
 app.use('/patient', patientAuthMiddleware, patientRouter)
-app.use('/doctor', doctorRouter)
+app.use('/doctor', doctorAuthMiddleware, doctorRouter)
 
 //errors
 app.use(notFound)

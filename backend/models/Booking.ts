@@ -27,7 +27,7 @@ const BookingSchema = new Schema<bookingType>({
     },
     appointmentTime:{
         type: Number,
-        enum: [8, 10, 12, 14, 16],
+        enum: [8, 10, 13, 15],
         required: true
     },
     appointmentDate: {
