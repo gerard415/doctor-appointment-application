@@ -1,13 +1,14 @@
 import express from 'express'
 const router = express.Router()
 
-import {getDoctor, getAllDoctors, editDoctor, deleteDoctor, getDoctorBookings, getDoctorReviews} from '../controllers/doctor'
+import {getDoctor, getDoctorProfile, getAllDoctors, editDoctor, deleteDoctor, getDoctorBookings, getDoctorReviews} from '../controllers/doctor'
 import doctorAuthMiddleware = require('../middleware/doctorAuthentication')
 import { postDoctorReviews, createPatientBookings } from '../controllers/patient'
 import patientAuthMiddleware from '../middleware/patientAuthentication'
 import { photoMiddleware } from '../utils/multer'
 
-router.get('/profile', getDoctor)
+router.get('/:id', getDoctor)
+router.get('/profile/me', doctorAuthMiddleware, getDoctorProfile)
 router.get('/', getAllDoctors)
 router.patch('/profile',photoMiddleware.single('photo'), doctorAuthMiddleware, editDoctor)
 router.delete('/profile', doctorAuthMiddleware, deleteDoctor)

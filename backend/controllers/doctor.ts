@@ -18,12 +18,19 @@ interface MyUserRequest extends Request {
 }
 
 const getDoctor = async (req: Request, res: Response) => {
+    const {id: doctorId} = req.params
+
+    const {name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id} = await Doctor.findById(doctorId) as doctorType
+    res.status(StatusCodes.OK).json({name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id})
+}
+
+const getDoctorProfile = async (req: Request, res: Response) => {
     const {token} = req.cookies
 
     if(token) {
         const {doctorId} = jwt.verify(token, SECRET) as MyToken
-        const {name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id} = await Doctor.findById(doctorId) as doctorType
-        res.status(StatusCodes.OK).json({name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id})
+        const {name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id, appointments} = await Doctor.findById(doctorId) as doctorType
+        res.status(StatusCodes.OK).json({name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, appointments, _id:id})
     }else{
         res.json(null)
     }
@@ -73,4 +80,4 @@ const getDoctorReviews = async (req: Request, res: Response) => {
 }
 
 
-export {getDoctor, getAllDoctors, editDoctor, deleteDoctor, getDoctorBookings, getDoctorReviews}
+export {getDoctor, getDoctorProfile, getAllDoctors, editDoctor, deleteDoctor, getDoctorBookings, getDoctorReviews}
