@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes"
 import { Request, Response, NextFunction } from "express"
+import CustomAPIError from "../errors/custom-api";
 const errorHandlerMiddleware = (err: { statusCode: StatusCodes; message: string; name: string; errors: { [s: string]: unknown } | ArrayLike<unknown>; code: number; keyValue: {}; value: any }, req:Request, res:Response, next:NextFunction) => {
   let customError = {
     // set default
@@ -7,9 +8,9 @@ const errorHandlerMiddleware = (err: { statusCode: StatusCodes; message: string;
     msg: err.message || 'Something went wrong try again later',
   }
 
-  // if (err instanceof CustomAPIError) {
-  //   return res.status(err.statusCode).json({ msg: err.message })
-  // }
+  if (err instanceof CustomAPIError) {
+    return res.status(err.statusCode).json({ msg: err.message })
+  }
 
   if (err.name === 'ValidationError') {
     customError.msg = Object.values(err.errors)
