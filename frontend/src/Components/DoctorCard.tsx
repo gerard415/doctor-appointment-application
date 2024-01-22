@@ -2,15 +2,20 @@ import React from 'react'
 import {AiOutlineArrowRight} from 'react-icons/ai'
 import image from '../assets/images/doctor.jpeg'
 import { Link } from 'react-router-dom'
+import { doctorStateProps } from '../types'
 
-const DoctorCard = () => {
+type doctorCardType = {
+    doctor : doctorStateProps
+}
+
+const DoctorCard = ({doctor}: doctorCardType) => {
   return (
     <div className='middle:w-[200px] galaxyfold:w-full space-y-4'>
         <div className=' '>
             <img src={image} alt="" className='middle:w-[200px] galaxyfold:w-full h-[250px]  rounded-xl ' />
         </div>
         <div className='space-y-2'>
-            <p className='font-bold middle:text-[17px] text-[13px] '>Dr . Alfaz Ahmed</p>
+            <p className='font-bold middle:text-[17px] text-[13px] '>Dr . {doctor.name}</p>
             <div className='flex justify-between'>
                 <div className='text-center h-[30px] middle:w-[80px] middle:text-[12px] text-[9px] p-2 flex justify-center items-center bg-sky-400  bg-opacity-25 text-cyan-900 '>
                     surgeon
@@ -27,7 +32,7 @@ const DoctorCard = () => {
             </div>
             <div className='flex justify-between items-center'>
                 <p className='text-[9px] middle:text-[10px] flex justify-center items-center  text-gray-500'>At Mount Adora Hospital Sylnet</p>
-                <Link to={'/doctors/1'} className='w-[30px] h-[30px] rounded-full border border-solid flex items-center justify-center '>
+                <Link to={`/doctors/${doctor._id}`} className='w-[30px] h-[30px] rounded-full border border-solid flex items-center justify-center '>
                     <AiOutlineArrowRight/>
                 </Link>
             </div>

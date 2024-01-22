@@ -1,12 +1,22 @@
 import React from 'react'
 import EducationCard from '../Components/EducationCard'
 import ExperienceCard from '../Components/ExperienceCard'
+import { doctorStateProps } from '../types'
+import { useOutletContext } from 'react-router-dom'
+
+
+type contextProps = {
+    doctor: doctorStateProps | null
+    setDoctor: React.Dispatch<React.SetStateAction<doctorStateProps | null>>
+}
 
 const SingleDoctorAboutPage = () => {
+    const {doctor, setDoctor} = useOutletContext<contextProps>()
+
     return (
         <div className='space-y-10'>
             <div className='pt-7 space-y-4'>
-                <p className='text-[13px] font-semibold tracking-wide '>About of <span className='text-cyan-400 font-bold text-[15px] '>John Smith</span></p>
+                <p className='text-[13px] font-semibold tracking-wide '>About of <span className='text-cyan-400 font-bold text-[15px] '>{doctor?.name}</span></p>
                 <p className='text-[12px] leading-7 text-gray-500 '>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
             </div>
             <div>

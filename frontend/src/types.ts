@@ -18,7 +18,7 @@ export type patientStateProps = {
 export type doctorStateProps = {
     name: string,
     email: string
-    id: string,
+    _id: string,
     phone?: number,
     ticketPrice: number,
     specialization?: string,
