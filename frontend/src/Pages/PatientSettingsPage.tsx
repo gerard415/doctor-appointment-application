@@ -4,6 +4,7 @@ import { UserProps, imageProps } from '../types';
 import { UserContext } from '../UserContext';
 import ImageUploader from '../Components/ImageUploader';
 import { Navigate } from 'react-router-dom';
+import { errorNotification, successfulNotification } from '../notifications';
 
 const PatientSettingsPage = () => {
   const {setUser, user, ready}: UserProps = useContext(UserContext)
@@ -16,23 +17,25 @@ const PatientSettingsPage = () => {
   const [password, setPassword] = useState<string | undefined>()
   const [bloodtype, setBloodType] = useState<string | undefined>(user?.bloodtype)
   const [phone, setPhone] = useState<number | undefined>(user?.phone)
-  const [photo, setPhoto] = useState<imageProps[]>([{fileName: '', filePath: ''}])
+  const [photo, setPhoto] = useState<imageProps[]>([])
   const [redirect, setRedirect] = useState<boolean>(false)
 
   const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     if(firstname === '' || lastname === '' || (password && password.length < 8)){
-      console.log('profile could not be updated')
+      errorNotification('profile could not be updated')
     }
 
     try {
       const {data} = await axios.patch('/patient/profile', {
-        name:firstname+ ' ' +lastname, password, bloodtype, phone, photo:photo[0].filePath
+        name:firstname+ ' ' +lastname, password, bloodtype, phone, photo:photo[0]?.filePath
       })
       setUser(data)
       setRedirect(true)
+      successfulNotification('profile updated successfully')
     } catch (error) {
+      errorNotification('profile could not be updated')
       console.log(error)
     }
   }
@@ -50,7 +53,7 @@ const PatientSettingsPage = () => {
             <input type="text" name="last name" value={lastname} onChange={(e) => setLastName(e.target.value)} id="" placeholder={'last name'} className='border-b w-full h-[30px] text-gray-400 text-[15px] outline-none '/>
             <input type="text" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='password' className='border-b w-full h-[30px] text-gray-400 text-[15px] outline-none '/>
             <input type="text" name="bloodtype" value={bloodtype} onChange={(e) => setBloodType(e.target.value)} id="" placeholder='blood type' className='border-b w-full h-[30px] text-gray-400 text-[15px] outline-none '/>
-            <input type="number" name="first name" value={phone === 0 ? '' : phone} onChange={(e) => setPhone(Number(e.target.value))}  id=""  className='border-b w-full h-[30px] text-gray-400 text-[15px] outline-none appearance-none '/>
+            <input type="number" name="phone number" value={phone === 0 ? '' : phone} onChange={(e) => setPhone(Number(e.target.value))} placeholder='phone number'  id=""  className='border-b w-full h-[30px] text-gray-400 text-[15px] outline-none appearance-none '/>
           </div>
           <div className='flex space-x-2'>
             {user?.photo ? 
@@ -73,7 +76,6 @@ const PatientSettingsPage = () => {
           </div>
           <button className=' bg-blue-600 w-full h-[30px] text-white text-[12px] rounded-md '>Update profile</button>
         </form>
-        <button className=' bg-blue-600 w-full h-[30px] text-white text-[12px] rounded-md ' onClick={() => console.log(photo[0].filePath)}>Whatever</button>
     </div>
   )
 }
