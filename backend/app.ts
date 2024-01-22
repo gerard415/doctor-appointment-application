@@ -10,17 +10,19 @@ const app:Application = express()
 
 import connectDB from './db/connect'
 
-import patientAuthMiddleware from './middleware/patientAuthentication'
+
 
 //routers
 import authRouter from './routes/auth'
 import patientRouter from './routes/patient'
 import doctorRouter from './routes/doctor'
+import bookingRouter from './routes/booking'
 
 //error handlers
 import notFound from './middleware/not-found'
 import errorHandlerMiddleware from './middleware/errorHandler'
 import doctorAuthMiddleware from './middleware/doctorAuthentication'
+import patientAuthMiddleware from './middleware/patientAuthentication'
 
 //middleware
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
@@ -32,7 +34,8 @@ app.use(express.urlencoded({ extended: true }));
 //routes
 app.use('/auth', authRouter)
 app.use('/patient', patientAuthMiddleware, patientRouter)
-app.use('/doctor', doctorAuthMiddleware, doctorRouter)
+app.use('/doctor', doctorRouter)
+app.use('/booking', patientAuthMiddleware, bookingRouter)
 
 //errors
 app.use(notFound)
