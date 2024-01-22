@@ -16,10 +16,13 @@ type bookingComponentType = {
   setCurrentSelect: React.Dispatch<React.SetStateAction<string | null>>
   selectedTime: number | null
   setSelectedTime: React.Dispatch<React.SetStateAction<number | null>>
+  selectedDate: Date | null
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>
+  nonAvailableTime: number[]
+  setNonAvailableTimes: React.Dispatch<React.SetStateAction<number[]>>
 }
 
-const BookingComponent = ({formattedDate, setFormattedDate, currentSelect, setCurrentSelect, selectedTime, setSelectedTime}: bookingComponentType) => {
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+const BookingComponent = ({nonAvailableTime, setFormattedDate, currentSelect, setCurrentSelect, selectedTime, setSelectedTime, selectedDate, setSelectedDate}: bookingComponentType) => {
 
     const handleSelect = (value: Date | null) => {
         setSelectedDate(value)
@@ -46,7 +49,7 @@ const BookingComponent = ({formattedDate, setFormattedDate, currentSelect, setCu
                   className='text-[9px]'
                   label='Select an appointment date'
                   format='DD-MM-YYYY'
-                  defaultValue={selectedDate}
+                  value={selectedDate}
                   disablePast
                   desktopModeMediaQuery='@media (min-width: 768px)'
                   onChange={newValue => handleSelect(newValue)}
@@ -62,7 +65,7 @@ const BookingComponent = ({formattedDate, setFormattedDate, currentSelect, setCu
                             width: '280px'
                           }
                         }
-                      }
+                      },
                     }} 
                                 
               />
@@ -72,7 +75,7 @@ const BookingComponent = ({formattedDate, setFormattedDate, currentSelect, setCu
                     <button 
                       key={element.name} 
                       className='w-full border  bg-yellow-300 disabled:opacity-50 '
-                      disabled={currentSelect ? currentSelect !== element.name : undefined}
+                      disabled={ nonAvailableTime?.includes(element.value) || currentSelect ? currentSelect !== element.name : undefined}
                       onClick={() => handleClick(element)}
                     >
                       {element.name}

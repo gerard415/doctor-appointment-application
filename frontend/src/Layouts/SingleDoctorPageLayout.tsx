@@ -1,12 +1,52 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import image from '../assets/images/doctor.jpeg'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet, useParams } from 'react-router-dom'
 import BookingComponent from '../Components/BookingComponent'
+import { doctorStateProps } from '../types'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import { errorNotification, successfulNotification } from '../notifications'
 
 const SingleDoctorPageLayout = () => {
     const [formattedDate, setFormattedDate] = useState<string | null>(null)
     const [currentSelect, setCurrentSelect] = useState<string | null>(null)
     const [selectedTime, setSelectedTime] = useState<number | null>(null)
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+    const [doctor, setDoctor] = useState<doctorStateProps | null>(null)
+    const [nonAvailableTime, setNonAvailableTimes] = useState<number[]>([])
+
+    let {id} = useParams()
+
+    useEffect(() => {
+        if(!doctor){
+            axios.get(`doctor/${id}`).then(({data}) => {
+                setDoctor(data)
+            })
+        }
+    })
+
+    useEffect(() => {
+        axios.post<number[]>(`booking/${id}`, {appointmentDate:formattedDate}).then(({data}) => {
+            setNonAvailableTimes(data)
+        })
+    }, [formattedDate])
+
+    
+    const bookAppointment = async () => {
+        try {
+            await axios.post(`doctor/${id}/bookings` , {appointmentDate:formattedDate, appointmentTime:selectedTime})
+            setSelectedDate(null)
+            setSelectedTime(null)
+            setCurrentSelect(null)
+            setNonAvailableTimes([])
+            setFormattedDate(null)
+            successfulNotification('appointment booked successfully')
+            
+        } catch (error) {
+            errorNotification('error occured, please try again later')
+        }
+    }
+    
 
 
     return (
@@ -21,7 +61,7 @@ const SingleDoctorPageLayout = () => {
                             surgeon
                         </div>
                         <p className='text-[15px] font-bold '>
-                            John Smith
+                            {doctor?.name}
                         </p>
                         <div className='flex justify-center items-center space-x-1 text-[15px] mb-3'>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={0} stroke="currentColor" className="w-6 h-5 fill-yellow-500">
@@ -40,14 +80,14 @@ const SingleDoctorPageLayout = () => {
                 <div>
                     <div>
                         <div className='flex mb-2'>
-                            <NavLink to={'/doctors/1'}  end>
+                            <NavLink to={`/doctors/${id}`}  end>
                                 {({ isActive}) => (
                                     <div className='text-[11px] text-center w-[100px] font-bold' >
                                         <span className={isActive ? "text-blue-500" : ""}>About</span>
                                     </div>
                                 )}
                             </NavLink>
-                            <NavLink to={'/doctors/1/feedback'}>
+                            <NavLink to={`/doctors/${id}/feedback`}>
                                 {({ isActive}) => (
                                     <div className='text-[11px] text-center w-[100px] font-bold' >
                                         <span className={isActive ? "text-blue-500" : ""}>Feedback</span>
@@ -58,7 +98,7 @@ const SingleDoctorPageLayout = () => {
                         <hr />
                     </div>
                     <div>
-                        <Outlet/>
+                        <Outlet context={{doctor, setDoctor}} />
                     </div>
                 </div>
             </div>
@@ -72,9 +112,11 @@ const SingleDoctorPageLayout = () => {
                             formattedDate={formattedDate} setFormattedDate={setFormattedDate} 
                             currentSelect={currentSelect} setCurrentSelect={setCurrentSelect}
                             selectedTime={selectedTime} setSelectedTime={setSelectedTime}
+                            selectedDate={selectedDate} setSelectedDate={setSelectedDate}
+                            nonAvailableTime={nonAvailableTime} setNonAvailableTimes={setNonAvailableTimes}
                         />
                 </div>
-                <button className=' bg-blue-600 w-full h-[45px] text-white text-[12px] rounded-md ' onClick={() => console.log(formattedDate, currentSelect, selectedTime)}>Book Appointment</button>
+                <button className=' bg-blue-600 w-full h-[45px] text-white text-[12px] rounded-md disabled:bg-opacity-50 ' disabled={!formattedDate || !selectedTime}  onClick={() => bookAppointment()}>Book Appointment</button>
             </div>
         </div>
     )
