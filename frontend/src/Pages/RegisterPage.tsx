@@ -16,7 +16,7 @@ const RegisterPage= () => {
     const {setUser, user, ready}: UserProps = useContext(UserContext)
     const [redirect, setRedirect] = useState<boolean>(false)
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         try {
             const {data} = await axios.post('/auth/register', {name: `${firstname}` + ` ${lastname}`, email, password, role})
@@ -51,7 +51,7 @@ const RegisterPage= () => {
                             <h1 className="font-bold text-3xl text-gray-900">REGISTER</h1>
                             <p>Enter your information to register</p>
                         </div>
-                        <form onSubmit={(e) => handleSubmit(e)}>
+                        <div>
                             <div className="flex -mx-3">
                                 <div className="w-1/2 px-3 mb-5">
                                     <label htmlFor="" className="text-xs font-semibold px-1">First name</label>
@@ -126,12 +126,12 @@ const RegisterPage= () => {
                             </div>
                             <div className="flex -mx-3 flex-col">
                                 <div className="w-full flex flex-col mb-5">
-                                    <button className="block w-full max-w-xs mx-auto bg-blue-500 hover:bg-blue-700 focus:bg-blue-700 text-white rounded-lg px-3 py-3 font-semibold">REGISTER NOW</button>
+                                    <button className="block w-full max-w-xs mx-auto bg-blue-500 hover:bg-blue-700 focus:bg-blue-700 text-white rounded-lg px-3 py-3 font-semibold" onClick={(e) => handleSubmit(e)}>REGISTER NOW</button>
                                     <p className=' block mx-auto' >Have an account? <Link to={'/login'} className=' text-blue-500' >Sign In</Link> </p>
                                 </div>
                                 <Link to={'/'}>Back to Home</Link>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>

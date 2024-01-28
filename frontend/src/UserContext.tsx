@@ -14,13 +14,12 @@ const UserContextProvider = ({children}: UserContextProviderProps) => {
     const [redirect,setRedirect] = useState<boolean>(false);
 
 
+
     useEffect(() => {
-        if(!user){
-            axios.get('/auth/user').then(({data}) => {
-                setUser(data)
-                setReady(true)
-            }).catch((err) => err)
-        }
+        axios.get('/auth/user').then(({data}) => {
+            setUser(data)
+            setReady(true)
+        }).catch((err) => err)
     },[user])
 
     return (

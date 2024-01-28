@@ -46,3 +46,12 @@ export type imageProps = {
     fileName: string,
     filePath: string
 }
+
+export type reviewProps = {
+    patientName: string
+    patientPhoto?: string
+    text: string
+    rating: number
+    createdAt: string
+    _id: string
+}

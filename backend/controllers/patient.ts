@@ -105,16 +105,19 @@ const postDoctorReviews = async (req: MyUserRequest, res: Response) => {
     const {id: doctorId} = req.params
     const {patientId} = req.user
 
-    const {text, rating} = req.body
+    const {text, rating, createdAt} = req.body
 
-    if(!text || !rating){
+    if(!text || !rating || !createdAt){
         throw new BadRequestError('Field cannot be empty')
     }
 
-    const doctorReview = await Review.create({doctor: doctorId, patient: patientId, ...req.body})
+    const date = moment(createdAt, "LL").toISOString()
+
+    const patient = await Patient.findById(patientId) as patientType
+    const doctorReview = await Review.create({doctor: doctorId, patient: patientId, patientName: patient.name, patientPhoto: patient.photo, text: text, rating: rating, createdAt: date}) as reviewType
     const reviews = await Review.find({doctor: doctorId}) as reviewType[]
     const doc = await Doctor.findById( doctorId ) as doctorType
-
+    
     const ratingsSum = reviews.reduce((accumulator, currentValue) => accumulator + currentValue.rating,0);
 
     const aveRating = ratingsSum/(doc.totalRatings + 1)
@@ -133,8 +136,10 @@ const postDoctorReviews = async (req: MyUserRequest, res: Response) => {
         },
     {new:true});
     doctor?.save()
+
+    const {patientName, patientPhoto, text:patientsText, rating:patientsRating, createdAt:dateCreated } = doctorReview
     
-    res.status(StatusCodes.CREATED).json({doctorReview})  
+    res.status(StatusCodes.CREATED).json({patientName, patientPhoto, text:patientsText, rating:patientsRating, dateCreated })  
 }
 
 export {getPatient, editPatient, deletePatient, getPatientBookings, postDoctorReviews, createPatientBookings}
