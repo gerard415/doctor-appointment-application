@@ -33,18 +33,18 @@ const getPatient = async (req: Request, res: Response) => {
 
 const editPatient = async (req: Request, res: Response) => {
     const {token} = req.cookies
-    const {name, password} = req.body
+    const {name, bloodtype, phone, photo} = req.body
 
-    if(name === '' || password === ''){
+    if(name === ''){
         throw new BadRequestError('Field cannot be empty')
     }
 
     if(token){
         const {patientId} = jwt.verify(token, SECRET) as MyToken
-        const user = await Patient.findOneAndUpdate({_id: patientId}, {...req.body}, {new:true, runValidators:true})
+        const user = await Patient.findOneAndUpdate({_id: patientId}, {name, bloodtype, phone, photo}, {new:true, runValidators:true})
         user?.save()
-        const {name, email, phone, role, appointments, _id:id, bloodtype, photo} = user as patientType
-        res.status(StatusCodes.OK).json({name, email, phone, role, appointments, _id:id, bloodtype, photo})
+        // const {name, email, phone, role, appointments, _id:id, bloodtype, photo} = user as patientType
+        res.status(StatusCodes.OK).json(user)
     }
 }
 

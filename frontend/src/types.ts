@@ -4,6 +4,7 @@ export type UserProps = {
     ready: boolean,
     redirect: boolean,
     setRedirect: React.Dispatch<React.SetStateAction<boolean>>,
+    setUpdateUser: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 export type patientStateProps = {
@@ -22,13 +23,15 @@ export type doctorStateProps = {
     phone?: number,
     ticketPrice: number,
     specialization?: string,
-    qualifications?: [Object],
-    experiences?: [Object],
+    qualifications?: qualificationsType[],
+    experiences: experienceType[],
     bio?: string,
     about?: string,
     averageRating?: number,
     totalRatings?: number,
     role: string
+    isApproved: string
+    photo?: string
 }
 
 export type userStateProps = {
@@ -39,7 +42,17 @@ export type userStateProps = {
     bloodtype: string
     phone: number
     photo?: string
-    appointments?: [Object] 
+    appointments?: [Object]
+    bio?: string
+    gender?: string
+    specialization?: string
+    ticketPrice: number
+    qualifications: qualificationsType[]
+    experiences: experienceType[]
+    about?: string
+    averageRating: number
+    totalRatings: number 
+    isApproved: string
 }
 
 export type imageProps = {
@@ -54,4 +67,18 @@ export type reviewProps = {
     rating: number
     createdAt: string
     _id: string
+}
+
+export type qualificationsType = {
+    startingDate: string
+    endingDate: string
+    degree: string
+    university: string
+}
+
+export type experienceType = {
+    startingDate: string
+    endingDate: string
+    position: string
+    hospital: string
 }

@@ -23,6 +23,7 @@ const SingleDoctorFeedbackPage = () => {
     const [doctorReviews, setDoctorReviews] = useState<reviewProps[] | null>(null)
     const {update, setUpdate} = useOutletContext<contextProps>()
     const [refresh, setRefresh] = useState<boolean>(false)
+    const {user}: UserProps = useContext(UserContext)
 
     let {id} = useParams()
 
@@ -33,6 +34,10 @@ const SingleDoctorFeedbackPage = () => {
     }, [refresh])
 
     const handleReview = async () => {
+        if(!user){
+            return errorNotification('Please log in to make a review')
+        }
+
         try {
             if(text === '' || rating === 0){
                 errorNotification('field cannot be empty')
@@ -47,6 +52,7 @@ const SingleDoctorFeedbackPage = () => {
             }
         } catch (error) {
             errorNotification('error, please try again later')
+            console.log(error)
         }
         
         

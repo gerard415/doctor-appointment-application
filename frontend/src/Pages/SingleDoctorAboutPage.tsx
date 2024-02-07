@@ -22,17 +22,17 @@ const SingleDoctorAboutPage = () => {
             <div>
                 <p className='text-[13px] font-semibold tracking-wide'>Education</p>
                 <div className='pt-2 space-y-4'>
-                    <EducationCard/>
-                    <EducationCard/>
-                    <EducationCard/>
+                    {doctor?.qualifications?.map((qualification) => (
+                        <EducationCard qualification={qualification} />
+                    ))}
                 </div>
             </div>
             <div>
                 <p className='text-[13px] font-semibold tracking-wide'>Experience</p>
                 <div className='pt-2 grid grid-cols-2 gap-4'>
-                    <ExperienceCard/>
-                    <ExperienceCard/>
-                    <ExperienceCard/>  
+                    {doctor?.experiences?.map((experience) => (
+                        <ExperienceCard experience={experience}/>
+                    ))}
                 </div>
             </div>
         </div>

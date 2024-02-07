@@ -21,8 +21,8 @@ interface MyUserRequest extends Request {
 const getDoctor = async (req: Request, res: Response) => {
     const {id: doctorId} = req.params
 
-    const {name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id} = await Doctor.findById(doctorId) as doctorType
-    res.status(StatusCodes.OK).json({name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id})
+    const {name, email, phone, gender, photo, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id} = await Doctor.findById(doctorId) as doctorType
+    res.status(StatusCodes.OK).json({name, email, phone, gender, photo, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id})
 }
 
 const getDoctorProfile = async (req: Request, res: Response) => {
@@ -30,8 +30,8 @@ const getDoctorProfile = async (req: Request, res: Response) => {
 
     if(token) {
         const {doctorId} = jwt.verify(token, SECRET) as MyToken
-        const {name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id, appointments} = await Doctor.findById(doctorId) as doctorType
-        res.status(StatusCodes.OK).json({name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, appointments, _id:id})
+        const {name, email, phone, gender, photo, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id, appointments} = await Doctor.findById(doctorId) as doctorType
+        res.status(StatusCodes.OK).json({name, email, phone, gender, photo, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, appointments, _id:id})
     }else{
         res.json(null)
     }
@@ -44,18 +44,15 @@ const getAllDoctors = async (req: Request, res: Response) => {
 
 const editDoctor = async (req: Request, res: Response) => {
     const {token} = req.cookies
-    const {name, password} = req.body
 
-    if(name === '' || password === ''){
-        throw new BadRequestError('Field cannot be empty')
-    }
+    const {name, phone, bio, gender, specialization, qualifications, experiences, about, photo, isApproved} = req.body
 
     if(token){
         const {doctorId} = jwt.verify(token, SECRET) as MyToken
-        const user = await Doctor.findOneAndUpdate({_id: doctorId}, {...req.body}, {new:true, runValidators:true})
+        const user = await Doctor.findOneAndUpdate({_id: doctorId}, {name, phone, bio, gender, specialization, qualifications, experiences, about, photo, isApproved}, {new:true, runValidators:true})
         user?.save()
-        const {name, email, phone, role, appointments, _id:id} = user as doctorType
-        res.status(StatusCodes.OK).json({name, email, phone, role, appointments, _id:id})
+        // const {name, email, phone, gender, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id, appointments} = user as doctorType
+        res.status(StatusCodes.OK).json(user)
     }
 }
 

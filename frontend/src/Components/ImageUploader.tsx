@@ -3,8 +3,8 @@ import { imageProps } from '../types'
 import axios from 'axios'
 
 type ImageUploaderProps = {
-    photo: imageProps[]
-    setPhoto: React.Dispatch<React.SetStateAction<imageProps[]>>
+    photo: string | undefined
+    setPhoto: React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
 const ImageUploader = ({photo, setPhoto}: ImageUploaderProps) => {
@@ -16,15 +16,16 @@ const ImageUploader = ({photo, setPhoto}: ImageUploaderProps) => {
         }
 
         setUploading(true)
-        const data = new FormData()
-        data.append('photo', files[0])
+        const formData = new FormData()
+        formData.append('photo', files[0])
 
         try {
-            const {data:image} = await axios.post('/auth/upload', data, {
-            headers: {'Content-Type':'multipart/form-data'}
+            const {data} = await axios.post('/auth/upload', formData, {
+                headers: {'Content-Type':'multipart/form-data'}
             })
             setUploading(false)
-            setPhoto(image) 
+            setPhoto(data.filePath)
+            console.log(data)
         } catch (error) {
             console.log(error)
         }

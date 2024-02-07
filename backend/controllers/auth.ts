@@ -104,8 +104,8 @@ const getUser  = async (req:Request, res:Response) => {
 
         if('doctorId' in decoded){
             const {doctorId} = decoded
-            const {name, email, phone, ticketPrice, specialization, qualifications, experiences, bio, role, about, averageRating, totalRatings, _id:id, photo} = await Doctor.findById(doctorId) as doctorType
-            res.status(StatusCodes.OK).json({name, email, phone, ticketPrice, specialization, qualifications, role, experiences, bio, about, averageRating, totalRatings, _id:id, photo})
+            const {name, email, phone,gender, ticketPrice, specialization, qualifications, experiences, bio, role, about, averageRating, totalRatings, _id:id, photo, isApproved} = await Doctor.findById(doctorId) as doctorType
+            res.status(StatusCodes.OK).json({name, email, phone, gender, ticketPrice, specialization, qualifications, role, experiences, bio, about, averageRating, totalRatings, _id:id, photo, isApproved})
         }
 
     }else{
@@ -114,7 +114,7 @@ const getUser  = async (req:Request, res:Response) => {
 }
 
 const upload = async (req:Request, res:Response) => {
-    let fileData = [];
+    let fileData = {};
     if (req.file) {
     // Save image to cloudinary
     let uploadedFile 
@@ -124,11 +124,11 @@ const upload = async (req:Request, res:Response) => {
                 folder: "products",
                 resource_type: "image",
             })
-            fileData.push({
+
+            fileData = {
                 fileName: req.file.originalname,
                 filePath: uploadedFile.secure_url,
-            })
-
+            }
         } catch (error) {
             res.status(500);
             throw new Error('Image could not be Uploaded');

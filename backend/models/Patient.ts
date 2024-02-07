@@ -42,7 +42,8 @@ const PatientSchema = new Schema<patientType>({
         default: 0 
     },
     photo: {
-        type: String
+        type: String,
+        default: ''
     },
     role: {
         type: String,
@@ -58,8 +59,11 @@ const PatientSchema = new Schema<patientType>({
     }]
 })
 
-//hashing the password using mongoose middleware
-PatientSchema.pre('save', async function(){
+// hashing the password using mongoose middleware
+PatientSchema.pre('save', async function(next){
+    // only hash the password if it has been modified (or is new)
+    if (!this.isModified('password')) return next();
+
     const salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt) 
 })

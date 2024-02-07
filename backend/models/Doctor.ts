@@ -3,6 +3,20 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import Review from "./Review"
 
+type qualificationsType = {
+    startingDate: string
+    endingDate: string
+    degree: string
+    university: string
+}
+
+type experienceType = {
+    startingDate: string
+    endingDate: string
+    position: string
+    hospital: string
+}
+
 export type doctorType = {
     createJWT: () => void,
     comparePassword: (arg0: string) => boolean,
@@ -10,12 +24,13 @@ export type doctorType = {
     email: string,
     password: string,
     phone: number,
+    gender: string,
     photo: string,
     role: 'doctor',
     ticketPrice: number,
     specialization: string,
-    qualifications: [Object],
-    experiences: [Object],
+    qualifications: [qualificationsType],
+    experiences: [experienceType],
     bio: string,
     about: string,
     reviews: [Object],
@@ -51,15 +66,21 @@ const DoctorSchema = new Schema<doctorType>({
         type: Number,
         default: 0 
     },
+    gender: {
+        type: String,
+        enum: ['', 'male', 'female'],
+        default: ''
+    },
     photo: {
-        type: String
+        type: String,
+        default: ''
     },
     role: {
         type: String,
     },
     ticketPrice: {
         type: Number,
-        default: 1000,
+        default: 70,
         required: true
     },
     specialization: {
@@ -67,9 +88,11 @@ const DoctorSchema = new Schema<doctorType>({
     },
     qualifications: {
         type: [Object],
+        default: []
     },
     experiences: {
-        type: [Object]
+        type: [Object],
+        default: []
     },
     bio: {
         type: String,
@@ -97,8 +120,8 @@ const DoctorSchema = new Schema<doctorType>({
     },
     isApproved: {
         type: String,
-        enum: ["pending", "approved", "cancelled"],
-        default: 'pending'
+        enum: ["pending", "approved", "unapproved"],
+        default: "unapproved"
     },
     appointments: [{
         type: mongoose.Types.ObjectId,
@@ -108,11 +131,15 @@ const DoctorSchema = new Schema<doctorType>({
     
 })
 
-//hashing the password using mongoose middleware
-DoctorSchema.pre('save', async function(){
+// hashing the password using mongoose middleware
+DoctorSchema.pre('save', async function(next){
+    // only hash the password if it has been modified (or is new)
+    if (!this.isModified('password')) return next();
+
     const salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt) 
 })
+
 
 //creating the token using mongoose instance mathods
 DoctorSchema.methods.createJWT = function(){
