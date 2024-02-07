@@ -29,7 +29,7 @@ const PatientSettingsPage = () => {
 
     try {
       const {data} = await axios.patch('/patient/profile', {
-        name:firstname+ ' ' +lastname, password, bloodtype, phone, photo:photo[0]?.filePath
+        name:firstname+ ' ' +lastname, bloodtype, phone, photo:photo[0]?.filePath
       })
       setUser(data)
       setRedirect(true)

@@ -6,6 +6,7 @@ import UnauthenticatedError from '../errors/unauthenticated';
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
 import Review, { reviewType } from '../models/Review';
 import Booking from '../models/Booking';
+import Patient, { patientType } from '../models/Patient';
 
 const SECRET: Secret = process.env.DOCTOR_SECRET!
 
@@ -76,7 +77,18 @@ const getDoctorBookings = async (req: MyUserRequest, res: Response) => {
 const getDoctorReviews = async (req: Request, res: Response) => {
     const {id: doctorId} = req.params
     const doctorReviews = await Review.find({doctor: doctorId}) as reviewType[]
-    res.status(StatusCodes.OK).json({doctorReviews, count:doctorReviews.length})
+
+    if(doctorReviews.length > 0){
+        res.json(await Promise.all(
+            doctorReviews.map(async ({patient, patientName, patientPhoto, text, rating, createdAt, _id}) => {
+                const user = await Patient.findById(patient) as unknown as patientType
+                return {patientName, patientPhoto: user.photo, text, rating, createdAt, _id}
+            })
+        ))
+    }else {
+        res.json([])
+    }
+    
 }
 
 
