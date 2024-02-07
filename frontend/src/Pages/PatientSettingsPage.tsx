@@ -7,7 +7,7 @@ import { Navigate } from 'react-router-dom';
 import { errorNotification, successfulNotification } from '../notifications';
 
 const PatientSettingsPage = () => {
-  const {setUser, user, ready}: UserProps = useContext(UserContext)
+  const {setUpdateUser, user, ready}: UserProps = useContext(UserContext)
   const fullName = user?.name?.split(' ')
   
 
@@ -17,21 +17,21 @@ const PatientSettingsPage = () => {
   const [password, setPassword] = useState<string | undefined>()
   const [bloodtype, setBloodType] = useState<string | undefined>(user?.bloodtype)
   const [phone, setPhone] = useState<number | undefined>(user?.phone)
-  const [photo, setPhoto] = useState<imageProps[]>([])
+  const [photo, setPhoto] = useState<string | undefined>()
   const [redirect, setRedirect] = useState<boolean>(false)
 
   const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if(firstname === '' || lastname === '' || (password && password.length < 8)){
+    if(firstname === '' || lastname === ''){
       errorNotification('profile could not be updated')
     }
 
     try {
-      const {data} = await axios.patch('/patient/profile', {
-        name:firstname+ ' ' +lastname, bloodtype, phone, photo:photo[0]?.filePath
+      await axios.patch('/patient/profile', {
+        name:firstname+ ' ' +lastname, bloodtype, phone, photo:photo
       })
-      setUser(data)
+      setUpdateUser(prev => !prev)
       setRedirect(true)
       successfulNotification('profile updated successfully')
     } catch (error) {
@@ -51,20 +51,16 @@ const PatientSettingsPage = () => {
           <div className='space-y-3'> 
             <input type="text" name="first name" value={firstname} onChange={(e) => setFirstName(e.target.value)} id="" placeholder={'first name'} className='border-b w-full h-[30px] text-gray-400 text-[15px] outline-none '/>
             <input type="text" name="last name" value={lastname} onChange={(e) => setLastName(e.target.value)} id="" placeholder={'last name'} className='border-b w-full h-[30px] text-gray-400 text-[15px] outline-none '/>
-            <input type="text" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='password' className='border-b w-full h-[30px] text-gray-400 text-[15px] outline-none '/>
+            {/* <input type="text" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder='password' className='border-b w-full h-[30px] text-gray-400 text-[15px] outline-none '/> */}
             <input type="text" name="bloodtype" value={bloodtype} onChange={(e) => setBloodType(e.target.value)} id="" placeholder='blood type' className='border-b w-full h-[30px] text-gray-400 text-[15px] outline-none '/>
             <input type="number" name="phone number" value={phone === 0 ? '' : phone} onChange={(e) => setPhone(Number(e.target.value))} placeholder='phone number'  id=""  className='border-b w-full h-[30px] text-gray-400 text-[15px] outline-none appearance-none '/>
           </div>
-          <div className='flex space-x-2'>
-            {user?.photo ? 
+          <div className='flex space-x-2 items-center'>
+            {photo ? 
+              <img key={photo} src={photo}  alt="" className='rounded-full h-[40px] w-[40px] ' /> :
+            
+            user?.photo ? 
               <img src={user.photo}  alt="" className='rounded-full h-[40px] w-[40px] ' /> :
-
-              photo.length > 0 ? 
-              photo.map((photo) => {
-                return (
-                  <img key={photo.filePath} src={photo.filePath}  alt="" className='rounded-full h-[40px] w-[40px] ' />
-                )
-              }) :
 
               <div className='flex justify-center bg-gray-500 text-white rounded-full border border-gray-500 overflow-hidden h-[40px] w-[40px] '>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-[50px] w-[50px] relative top-1">

@@ -5,22 +5,25 @@ import { UserContext } from '../UserContext'
 import { UserProps } from '../types'
 import Loading from '../Components/Loading'
 import { useNavigate } from "react-router-dom";
+import { errorNotification, successfulNotification } from '../notifications'
 
 const LoginPage = () => {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [redirect, setRedirect] = useState<boolean>(false)
     
-    const {setUser, user, ready}: UserProps = useContext(UserContext)
+    const {setUser, user, ready, setUpdateUser}: UserProps = useContext(UserContext)
     
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
-            const {data} = await axios.post('/auth/login', {email,password})
-            setUser(data)
+            await axios.post('/auth/login', {email,password})
+            setUpdateUser(prev => !prev)
+            successfulNotification('login successful')
             setRedirect(true)
         } catch (error) {
-            return error
+            errorNotification('login unsuccessful, please try again later')
+            console.log(error)
         }        
     }
     

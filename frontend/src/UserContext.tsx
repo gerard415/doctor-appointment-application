@@ -12,6 +12,7 @@ const UserContextProvider = ({children}: UserContextProviderProps) => {
     const [user, setUser] = useState<userStateProps | null>(null)
     const [ready, setReady] = useState(false)
     const [redirect,setRedirect] = useState<boolean>(false);
+    const [updateUser, setUpdateUser] = useState(false)
 
 
 
@@ -20,10 +21,10 @@ const UserContextProvider = ({children}: UserContextProviderProps) => {
             setUser(data)
             setReady(true)
         }).catch((err) => err)
-    },[user])
+    },[updateUser])
 
     return (
-        <UserContext.Provider value={{user, setUser, ready, redirect, setRedirect}}>
+        <UserContext.Provider value={{user, setUser, ready, redirect, setRedirect, setUpdateUser}}>
             {children}
         </UserContext.Provider>
     )

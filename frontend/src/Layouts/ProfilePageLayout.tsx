@@ -6,7 +6,7 @@ import axios from 'axios';
 import Loading from '../Components/Loading';
 
 const ProfilePageLayout = () => {
-    const {setUser, ready, user}: UserProps = useContext(UserContext)
+    const {ready, user, setUpdateUser}: UserProps = useContext(UserContext)
     const [redirect, setRedirect] = useState<boolean>(false)
     const [openMenu, setOpenMenu] = useState(true)
 
@@ -20,6 +20,7 @@ const ProfilePageLayout = () => {
         return <Loading/>
     }
 
+
     if(ready && !user){
         return <Navigate to={'/login'} />
     }
@@ -30,7 +31,13 @@ const ProfilePageLayout = () => {
 
     const handleLogout = async () => {
         await axios.post('/auth/logout')
-        setUser(null)
+        setUpdateUser(prev => !prev)
+        setRedirect(true)
+    }
+
+    const handleDeleteAccount = async () => {
+        await axios.delete('/patient/profile')
+        setUpdateUser(prev => !prev)
         setRedirect(true)
     }
 
@@ -88,7 +95,7 @@ const ProfilePageLayout = () => {
                             </div>
                             <div className='flex flex-col space-y-2'>
                                 <button className='bg-black text-white h-[30px] text-[11px] text-center flex items-center justify-center rounded-[4px] w-full ' onClick={handleLogout}>Logout</button>
-                                <button className='bg-red-500 text-white h-[30px] text-[11px] text-center flex items-center justify-center rounded-[4px] w-full' onClick={() => console.log(user?.photo)}>Delete Account</button>
+                                <button className='bg-red-500 text-white h-[30px] text-[11px] text-center flex items-center justify-center rounded-[4px] w-full' onClick={() => handleDeleteAccount()}>Delete Account</button>
                                 
                             </div>
                         </div> :

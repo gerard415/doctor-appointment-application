@@ -4,6 +4,7 @@ import axios from 'axios'
 import { UserProps } from '../types';
 import { UserContext } from '../UserContext';
 import Loading from '../Components/Loading';
+import { errorNotification, successfulNotification } from '../notifications';
 
 const RegisterPage= () => {
 
@@ -13,18 +14,19 @@ const RegisterPage= () => {
     const [password, setPassword] = useState<string>('')
     const [role, setRole] = useState<string>('patient')
 
-    const {setUser, user, ready}: UserProps = useContext(UserContext)
+    const {setUser, user, ready, setUpdateUser}: UserProps = useContext(UserContext)
     const [redirect, setRedirect] = useState<boolean>(false)
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         try {
-            const {data} = await axios.post('/auth/register', {name: `${firstname}` + ` ${lastname}`, email, password, role})
-            setUser(data)
-            // localStorage.setItem('user', JSON.stringify(data))
+            await axios.post('/auth/register', {name: `${firstname}` + ` ${lastname}`, email, password, role})
+            setUpdateUser(prev => !prev)
+            successfulNotification('registration successful')
             setRedirect(true)
         } catch (error) {
-            return error
+            errorNotification('registration unsuccessful, please try again later')
+            console.log(error)
         }
     }
 

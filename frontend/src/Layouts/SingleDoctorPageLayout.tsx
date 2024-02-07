@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import image from '../assets/images/doctor.jpeg'
-import { Link, NavLink, Outlet, useParams } from 'react-router-dom'
+import { Link, NavLink, Navigate, Outlet, useParams } from 'react-router-dom'
 import BookingComponent from '../Components/BookingComponent'
-import { doctorStateProps } from '../types'
+import { UserProps, doctorStateProps } from '../types'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { errorNotification, successfulNotification } from '../notifications'
+import { UserContext } from '../UserContext'
 
 const SingleDoctorPageLayout = () => {
     const [formattedDate, setFormattedDate] = useState<string | null>(null)
@@ -14,37 +15,49 @@ const SingleDoctorPageLayout = () => {
     const [selectedDate, setSelectedDate] = useState<Date | null>(null)
     const [doctor, setDoctor] = useState<doctorStateProps | null>(null)
     const [nonAvailableTime, setNonAvailableTimes] = useState<number[]>([])
+    const [update, setUpdate] = useState<boolean>(false)
 
     let {id} = useParams()
 
     useEffect(() => {
-        if(!doctor){
-            axios.get(`doctor/${id}`).then(({data}) => {
-                setDoctor(data)
-            })
-        }
-    })
+        axios.get(`doctor/${id}`).then(({data}) => {
+            setDoctor(data)
+        })
+    }, [update])
+
 
     useEffect(() => {
-        axios.post<number[]>(`booking/${id}`, {appointmentDate:formattedDate}).then(({data}) => {
-            setNonAvailableTimes(data)
-        })
+        if(formattedDate){
+            axios.post<number[]>(`booking/${id}`, {appointmentDate:formattedDate}).then(({data}) => {
+                setNonAvailableTimes(data)
+            })
+        } 
     }, [formattedDate])
 
     
     const bookAppointment = async () => {
         try {
-            await axios.post(`doctor/${id}/bookings` , {appointmentDate:formattedDate, appointmentTime:selectedTime})
-            setSelectedDate(null)
-            setSelectedTime(null)
-            setCurrentSelect(null)
-            setNonAvailableTimes([])
-            setFormattedDate(null)
-            successfulNotification('appointment booked successfully')
+
+            const {data} = await axios.post('/stripe/create-checkout-session')
+
+            if(data.url){
+                window.location.href = data.url
+            }
+
+            if(data.url === 'http://localhost:3000/success-page'){
+                await axios.post(`doctor/${id}/bookings` , {appointmentDate:formattedDate, appointmentTime:selectedTime})
+                successfulNotification('appointment booked successfully')
+                setSelectedDate(null)
+                setSelectedTime(null)
+                setCurrentSelect(null)
+                setNonAvailableTimes([])
+                setFormattedDate(null)
+            }
             
         } catch (error) {
             errorNotification('error occured, please try again later')
         }
+        
     }
     
 
@@ -68,8 +81,8 @@ const SingleDoctorPageLayout = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
                             </svg>
                             <div className='flex justify-center items-center space-x-1'>
-                                <p className='font-bold'>4.5</p>
-                                <p>(2)</p>
+                                <p className='font-bold'>{doctor?.averageRating}</p>
+                                <p>({doctor?.totalRatings})</p>
                             </div>
                         </div>
                         <p className='sm:text-[13px] text-[11px] text-gray-500 font-light md:pr-6'>
@@ -98,7 +111,7 @@ const SingleDoctorPageLayout = () => {
                         <hr />
                     </div>
                     <div>
-                        <Outlet context={{doctor, setDoctor}} />
+                        <Outlet context={{doctor, setDoctor, update, setUpdate}} />
                     </div>
                 </div>
             </div>
