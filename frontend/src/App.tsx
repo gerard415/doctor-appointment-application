@@ -23,6 +23,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SuccessPage from './Pages/SuccessPage';
+import NotFoundPage from './Pages/NotFoundPage';
+import UnsuccessfulPage from './Pages/UnsuccessfulPage';
 
 axios.defaults.baseURL = 'http://localhost:5000'
 axios.defaults.withCredentials = true
@@ -54,6 +57,9 @@ function App() {
                 <Route path='/doctor-profile/me' element={<DoctorProfilePage/>} />
               </Route>
             </Route>
+            <Route path='/success-page' element={<SuccessPage/>} />
+            <Route path='/unsuccessful-page' element={<UnsuccessfulPage/>} />
+            <Route path='/notfound-page' element={<NotFoundPage/>} />
           </Routes>
         </UserContextProvider>
       </LocalizationProvider>
