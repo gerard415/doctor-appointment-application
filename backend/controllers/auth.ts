@@ -98,8 +98,8 @@ const getUser  = async (req:Request, res:Response) => {
 
         if('patientId' in decoded){
             const {patientId} = decoded
-            const {name, email, phone, bloodtype, role, _id:id, photo} = await Patient.findById(patientId) as patientType
-            res.status(StatusCodes.OK).json({name, email, phone, bloodtype, role, _id:id, photo})
+            const {name, email, phone, bloodtype, role, _id:id, photo, gender} = await Patient.findById(patientId) as patientType
+            res.status(StatusCodes.OK).json({name, email, phone, bloodtype, role, _id:id, photo, gender})
         }
 
         if('doctorId' in decoded){

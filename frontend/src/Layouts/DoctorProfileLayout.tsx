@@ -63,6 +63,7 @@ const DoctorProfileLayout = () => {
                             }
                             <p className='font-bold text-[10px] text-center'>{user?.name}</p>
                             <p className='text-[10px] text-center'>{user?.email}</p>
+                            <p className='text-[10px] text-center'>{user?.gender}</p>
                         </div>
                         <div className='flex items-center flex-col w-full bg-white text-[11px] space-y-2'>
                             <NavLink to={'/doctor-profile'} className={'w-full'}  end>

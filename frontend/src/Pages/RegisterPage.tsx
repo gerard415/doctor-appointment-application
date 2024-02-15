@@ -13,6 +13,7 @@ const RegisterPage= () => {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [role, setRole] = useState<string>('patient')
+    const [gender, setGender] = useState<string>('male')
 
     const {setUser, user, ready, setUpdateUser}: UserProps = useContext(UserContext)
     const [redirect, setRedirect] = useState<boolean>(false)
@@ -20,7 +21,7 @@ const RegisterPage= () => {
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         try {
-            await axios.post('/auth/register', {name: `${firstname}` + ` ${lastname}`, email, password, role})
+            await axios.post('/auth/register', {name: `${firstname}` + ` ${lastname}`, email, password, role, gender})
             setUpdateUser(prev => !prev)
             successfulNotification('registration successful')
             setRedirect(true)
@@ -117,8 +118,15 @@ const RegisterPage= () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='flex -mx-3'>
-                                <div className='w-full px-3 mb-12'>
+                            <div className='flex justify-between mb-4'>
+                                <div className=''>
+                                    <label htmlFor="" className="text-xs font-semibold px-1">Gender</label>
+                                    <select onChange={(e) => setGender(e.target.value)} className='h-[35px] text-[15px] sm:w-[120px] space-x-2 border border-gray-300 rounded-lg p-1 pl-4 flex items-center text-gray-500' name="" id="">
+                                        <option value="male" className='border border-black '>male</option>
+                                        <option value="female" className='border border-black '>female</option>
+                                    </select>
+                                </div>
+                                <div className=''>
                                     <label htmlFor="" className="text-xs font-semibold px-1">Role</label>
                                     <select onChange={(e) => setRole(e.target.value)} className='h-[35px] text-[15px] sm:w-[120px] space-x-2 border border-gray-300 rounded-lg p-1 pl-4 flex items-center text-gray-500' name="" id="">
                                         <option value="patient" className='border border-black '>patient</option>
@@ -126,6 +134,22 @@ const RegisterPage= () => {
                                     </select>
                                 </div>
                             </div>
+                            {/* <div className='flex justify-between'>
+                                <div className='w-full px-3'>
+                                    <label htmlFor="" className="text-xs font-semibold px-1">Gender</label>
+                                    <select onChange={(e) => setGender(e.target.value)} className='h-[35px] text-[15px] sm:w-[120px] space-x-2 border border-gray-300 rounded-lg p-1 pl-4 flex items-center text-gray-500' name="" id="">
+                                        <option value="male" className='border border-black '>male</option>
+                                        <option value="female" className='border border-black '>female</option>
+                                    </select>
+                                </div>
+                                <div className='w-full px-3'>
+                                    <label htmlFor="" className="text-xs font-semibold px-1">Role</label>
+                                    <select onChange={(e) => setRole(e.target.value)} className='h-[35px] text-[15px] sm:w-[120px] space-x-2 border border-gray-300 rounded-lg p-1 pl-4 flex items-center text-gray-500' name="" id="">
+                                        <option value="patient" className='border border-black '>patient</option>
+                                        <option value="doctor" className='border border-black '>doctor</option>
+                                    </select>
+                                </div>
+                            </div> */}
                             <div className="flex -mx-3 flex-col">
                                 <div className="w-full flex flex-col mb-5">
                                     <button className="block w-full max-w-xs mx-auto bg-blue-500 hover:bg-blue-700 focus:bg-blue-700 text-white rounded-lg px-3 py-3 font-semibold" onClick={(e) => handleSubmit(e)}>REGISTER NOW</button>

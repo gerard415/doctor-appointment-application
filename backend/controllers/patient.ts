@@ -24,8 +24,8 @@ const getPatient = async (req: Request, res: Response) => {
 
     if(token) {
         const {patientId} = jwt.verify(token, SECRET) as MyToken
-        const {name, email, phone, bloodtype, _id:id} = await Patient.findById(patientId) as patientType
-        res.status(StatusCodes.OK).json({name, email, phone, bloodtype, _id:id})
+        const {name, email, phone, gender, bloodtype, _id:id} = await Patient.findById(patientId) as patientType
+        res.status(StatusCodes.OK).json({name, email, phone, gender, bloodtype, _id:id})
     }else{
         res.json(null)
     }
@@ -60,7 +60,18 @@ const deletePatient = async (req: Request, res: Response) => {
 const getPatientBookings = async (req: MyUserRequest, res: Response) => {
     const {patientId} = req.user
     const appointments = await Booking.find({patient:patientId})
-    res.status(StatusCodes.OK).json({appointments})
+
+    if(appointments.length > 0){
+        res.json(await Promise.all(
+            appointments.map(async ({doctor, status, appointmentDate, appointmentTime}) => {
+                const findDoctor = await Doctor.findById(doctor) as doctorType
+                return {name: findDoctor.name, gender: findDoctor.gender, status, bookedOn: appointmentDate, time: appointmentTime}
+            })
+        ))
+        // res.status(StatusCodes.OK).json(appointments)
+    }else{
+        res.json([])
+    }
 }
 
 const createPatientBookings = async (req: MyUserRequest, res: Response) => {

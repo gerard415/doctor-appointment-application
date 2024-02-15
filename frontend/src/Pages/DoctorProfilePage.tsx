@@ -23,7 +23,6 @@ const DoctorProfilePage = () => {
     const [email, setEmail] = useState<string | undefined>(user?.email)
     const [phone, setPhone] = useState<number | undefined>(user?.phone)
     const [bio, setBio] = useState<string | undefined>(user?.bio)
-    const [gender, setGender] = useState<string| undefined>(user?.gender)
     const [specialization, setSpecialization] = useState<string | undefined>(user?.specialization)
     const [ticketPrice, setTicketPrice] = useState<number | undefined>(user?.ticketPrice)
     const [qualifications, setQualifications] = useState<qualificationsType[] | undefined>(user?.qualifications)
@@ -76,7 +75,7 @@ const DoctorProfilePage = () => {
 
     const updateProfile = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        if(firstname === '' || lastname === '' || phone === 0 || bio === '' || gender === '' || specialization === '' || qualifications?.length === 0 || experience?.length === 0 || photo === '' || about === ''){
+        if(firstname === '' || lastname === '' || phone === 0 || bio === '' || specialization === '' || qualifications?.length === 0 || experience?.length === 0 || photo === '' || about === ''){
             return errorNotification('Please fill complete the whole form')
         }
 
@@ -98,7 +97,7 @@ const DoctorProfilePage = () => {
 
         try {
             await axios.patch('/doctor/profile', {
-              name:firstname+ ' ' +lastname, phone, bio, gender, specialization, qualifications, experiences:experience, about, photo:photo, isApproved: 'pending'
+              name:firstname+ ' ' +lastname, phone, bio, specialization, qualifications, experiences:experience, about, photo:photo, isApproved: 'pending'
             })
             setUpdateUser(prev => !prev)
             setCompletedProfile(true)
@@ -143,21 +142,6 @@ const DoctorProfilePage = () => {
                     <input type="text" defaultValue={bio}  onChange={(e) => setBio(e.target.value)}  placeholder='Bio' className='w-full p-2 rounded border outline-none ' />
                 </div>
                 <div className='sm:flex justify-between space-y-4 sm:space-y-0 sm:space-x-3'>
-                    <div className='flex flex-col space-y-2 w-full'>
-                        <label className='text-[13px]' htmlFor="">Gender*</label>
-                        {user?.gender ? 
-                            <select disabled className=' w-full p-2 rounded border outline-none text-gray-500'> 
-                                <option value="">{gender}</option>
-                            </select> : 
-
-                            <select name="" value={gender} placeholder={gender} onChange={(e) => setGender(e.target.value)} className=' w-full p-2 rounded border outline-none text-gray-500' id="">
-                                <option className='w-full p-2 rounded border outline-none text-gray-500' value="">Select</option>
-                                <option className='w-full p-2 rounded border outline-none text-gray-500' value="male">Male</option>
-                                <option className='w-full p-2 rounded border outline-none text-gray-500' value="female">Female</option>
-                            </select>
-                        }
-                        
-                    </div>
                     <div className='flex flex-col space-y-2 w-full'>
                         <label className='text-[13px]' htmlFor="">Specialization*</label>
                         <input type="text" defaultValue={specialization} onChange={(e) => setSpecialization(e.target.value)} placeholder='Specialization' className='w-full p-2 rounded border outline-none text-gray-500' />

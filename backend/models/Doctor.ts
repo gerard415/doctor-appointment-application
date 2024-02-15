@@ -68,8 +68,8 @@ const DoctorSchema = new Schema<doctorType>({
     },
     gender: {
         type: String,
-        enum: ['', 'male', 'female'],
-        default: ''
+        enum: ['male', 'female'],
+        default: 'male'
     },
     photo: {
         type: String,

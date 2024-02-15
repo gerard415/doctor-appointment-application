@@ -8,6 +8,7 @@ export type patientType = {
     name: string,
     email: string,
     password: string,
+    gender: string,
     phone: number,
     photo: string,
     role: 'patient',
@@ -36,6 +37,11 @@ const PatientSchema = new Schema<patientType>({
         type: String,
         required: [true, 'please provide a password'],
         minlength: 8
+    },
+    gender: {
+        type: String,
+        enum: ['male', 'female'],
+        default: 'male'
     },
     phone: {
         type: Number,

@@ -62,6 +62,7 @@ const ProfilePageLayout = () => {
                         
                         <p className='font-bold text-[10px] text-center'>{user?.name}</p>
                         <p className='text-[10px] text-center'>{user?.email}</p>
+                        <p className='text-[10px] text-center'>{user?.gender}</p>
                         <p className='text-[10px] text-center'>Blood Type: <span className='font-bold'>{user?.bloodtype}</span></p>
                     </div>
                     <div className='flex flex-col space-y-2'>
@@ -113,7 +114,7 @@ const ProfilePageLayout = () => {
                             Settings
                         </Link>
                     </div>
-                    <div className='md:w-[500px] w-full'>
+                    <div className='md:w-[700px] w-full'>
                         <Outlet/>
                     </div>
                 </div>
