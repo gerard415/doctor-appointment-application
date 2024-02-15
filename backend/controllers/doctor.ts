@@ -5,7 +5,7 @@ import BadRequestError from '../errors/bad-request';
 import UnauthenticatedError from '../errors/unauthenticated';
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
 import Review, { reviewType } from '../models/Review';
-import Booking from '../models/Booking';
+import Booking, { bookingType } from '../models/Booking';
 import Patient, { patientType } from '../models/Patient';
 
 const SECRET: Secret = process.env.DOCTOR_SECRET!
@@ -67,8 +67,18 @@ const deleteDoctor = async (req: Request, res: Response) => {
 
 const getDoctorBookings = async (req: MyUserRequest, res: Response) => {
     const {doctorId} = req.user
-    const appointments = await Booking.find({doctor:doctorId})
-    res.status(StatusCodes.OK).json({appointments})
+    const appointments = await Booking.find({doctor: doctorId}) as unknown as bookingType[]
+
+    if(appointments.length > 0){
+        res.json(await Promise.all(
+            appointments.map(async ({patient, status, appointmentDate, appointmentTime}) => {
+                const findPatient = await Patient.findById(patient) as patientType
+                return {name: findPatient.name, gender: findPatient.gender, status, bookedOn: appointmentDate, time: appointmentTime}
+            })
+        ))
+    }else{
+        res.json([])
+    }
 }
 
 const getDoctorReviews = async (req: Request, res: Response) => {

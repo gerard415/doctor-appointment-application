@@ -42,7 +42,7 @@ export type userStateProps = {
     bloodtype: string
     phone: number
     photo?: string
-    appointments?: [Object]
+    appointments?: appointmentType[]
     bio?: string
     gender?: string
     specialization?: string
@@ -81,4 +81,12 @@ export type experienceType = {
     endingDate: string
     position: string
     hospital: string
+}
+
+export type appointmentType = {
+    name: string
+    gender: string
+    status: string
+    bookedOn: string
+    time: number
 }
