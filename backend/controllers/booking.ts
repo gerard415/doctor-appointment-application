@@ -9,12 +9,11 @@ interface MyUserRequest extends Request {
 
 export const isAppointmentAvailable = async (req: MyUserRequest, res: Response) => {
     const {id: doctorId} = req.params
-    const {patientId} = req.user
     const { appointmentDate} = req.body
 
     const date = moment(appointmentDate, "DD-MM-YYYY").toISOString()
 
-    const appointment = await Booking.find({ patient: patientId, doctor: doctorId, appointmentDate: date }) as unknown  as bookingType[]
+    const appointment = await Booking.find({doctor: doctorId, appointmentDate: date }) as unknown  as bookingType[]
 
     if(appointment.length > 0){
         res.json(appointment.map((item => item.appointmentTime)))

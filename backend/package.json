@@ -17,6 +17,8 @@
     "@types/dotenv": "^8.2.0",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/mongoose": "^5.11.97",
+    "@types/stripe": "^8.0.417",
+    "@types/stripe-v3": "^3.1.33",
     "@types/uuid": "^9.0.7",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.41.1",
@@ -28,6 +30,8 @@
     "moment": "^2.29.4",
     "mongoose": "^8.0.1",
     "multer": "^1.4.5-lts.1",
+    "stripe": "^14.13.0",
+    "stripe-event-types": "^3.1.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

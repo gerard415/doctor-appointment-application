@@ -38,20 +38,10 @@ const SingleDoctorPageLayout = () => {
     const bookAppointment = async () => {
         try {
 
-            const {data} = await axios.post('/stripe/create-checkout-session')
+            const {data} = await axios.post(`/stripe/create-checkout-session/${id}`, {appointmentDate:formattedDate, appointmentTime:selectedTime})
 
-            if(data.url){
-                window.location.href = data.url
-            }
-
-            if(data.url === 'http://localhost:3000/success-page'){
-                await axios.post(`doctor/${id}/bookings` , {appointmentDate:formattedDate, appointmentTime:selectedTime})
-                successfulNotification('appointment booked successfully')
-                setSelectedDate(null)
-                setSelectedTime(null)
-                setCurrentSelect(null)
-                setNonAvailableTimes([])
-                setFormattedDate(null)
+            if(data.session.url){
+                window.location.href = data.session.url
             }
             
         } catch (error) {
@@ -71,7 +61,7 @@ const SingleDoctorPageLayout = () => {
                     </div>
                     <div className='flex flex-col items-start'>
                         <div className='text-center h-[30px] md:w-[80px] text-[12px] p-2 flex justify-center items-center bg-sky-400  bg-opacity-25 text-cyan-900 mb-2 mt-3'>
-                            surgeon
+                            {doctor?.specialization}
                         </div>
                         <p className='text-[15px] font-bold '>
                             {doctor?.name}
@@ -86,7 +76,7 @@ const SingleDoctorPageLayout = () => {
                             </div>
                         </div>
                         <p className='sm:text-[13px] text-[11px] text-gray-500 font-light md:pr-6'>
-                            Adispicing expilacebo Facero libero aliquip dolorem repudiande qui
+                            {doctor?.bio}
                         </p>
                     </div>
                 </div>
