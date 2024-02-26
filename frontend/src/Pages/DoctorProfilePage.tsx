@@ -7,7 +7,6 @@ import { errorNotification, successfulNotification } from '../notifications'
 import exp from 'constants'
 import axios from 'axios'
 import { Navigate, useOutletContext } from 'react-router-dom'
-import Select from "react-select";
 
 type contextProps = {
     setCompletedProfile: React.Dispatch<React.SetStateAction<boolean>>
