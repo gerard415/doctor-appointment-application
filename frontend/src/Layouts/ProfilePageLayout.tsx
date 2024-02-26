@@ -6,7 +6,7 @@ import axios from 'axios';
 import Loading from '../Components/Loading';
 
 const ProfilePageLayout = () => {
-    const {ready, user, setUpdateUser, setUser}: UserProps = useContext(UserContext)
+    const {ready, user, setUpdateUser}: UserProps = useContext(UserContext)
     const [redirect, setRedirect] = useState<boolean>(false)
     const [openMenu, setOpenMenu] = useState(true)
 
@@ -32,7 +32,6 @@ const ProfilePageLayout = () => {
     const handleLogout = async () => {
         await axios.post('/auth/logout')
         localStorage.removeItem('token')
-        setUser(null)
         setUpdateUser(prev => !prev)
         setRedirect(true)
     }
