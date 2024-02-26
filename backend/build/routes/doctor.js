@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+const express_1 = __importDefault(require("express"));
+const router = express_1.default.Router();
+const doctor_1 = require("../controllers/doctor");
+const doctorAuthMiddleware = require("../middleware/doctorAuthentication");
+const patient_1 = require("../controllers/patient");
+const patientAuthentication_1 = __importDefault(require("../middleware/patientAuthentication"));
+const multer_1 = require("../utils/multer");
+router.get('/:id', doctor_1.getDoctor);
+router.get('/profile/me', doctorAuthMiddleware, doctor_1.getDoctorProfile);
+router.get('/', doctor_1.getAllDoctors);
+router.patch('/profile', multer_1.photoMiddleware.single('photo'), doctorAuthMiddleware, doctor_1.editDoctor);
+router.delete('/profile', doctorAuthMiddleware, doctor_1.deleteDoctor);
+router.get('/profile/bookings', doctorAuthMiddleware, doctor_1.getDoctorBookings);
+router.get('/:id/reviews', doctor_1.getDoctorReviews);
+router.post('/:id/review', patientAuthentication_1.default, patient_1.postDoctorReviews);
+router.post('/:id/bookings', patientAuthentication_1.default, patient_1.createPatientBookings);
+module.exports = router;
