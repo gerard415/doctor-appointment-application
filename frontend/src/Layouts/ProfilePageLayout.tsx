@@ -4,11 +4,13 @@ import { UserContext } from '../UserContext'
 import { UserProps } from '../types'
 import axios from 'axios';
 import Loading from '../Components/Loading';
+import { successfulNotification } from '../notifications';
 
 const ProfilePageLayout = () => {
-    const {ready, user, setUpdateUser}: UserProps = useContext(UserContext)
+    const {ready, user, setUpdateUser, setUser}: UserProps = useContext(UserContext)
     const [redirect, setRedirect] = useState<boolean>(false)
     const [openMenu, setOpenMenu] = useState(true)
+    const [loggedOut, setLoggedOut] = useState(false)
 
     const location = useLocation();
 
@@ -21,8 +23,12 @@ const ProfilePageLayout = () => {
     }
 
 
-    if(ready && !user){
+    if(ready && !user && !loggedOut){
         return <Navigate to={'/login'} />
+    }
+
+    if(ready && !user && loggedOut){
+        return <Navigate to={'/'} />
     }
 
     if(ready && user && user.role === 'doctor'){
@@ -32,15 +38,17 @@ const ProfilePageLayout = () => {
     const handleLogout = async () => {
         await axios.post('/auth/logout')
         localStorage.removeItem('token')
-        setUpdateUser(prev => !prev)
-        console.log(user)
-        setRedirect(true)
+        setLoggedOut(true)
+        setUser(null)
+        successfulNotification('log out successfull')
     }
 
     const handleDeleteAccount = async () => {
         await axios.delete('/patient/profile')
-        setUpdateUser(prev => !prev)
-        setRedirect(true)
+        localStorage.removeItem('token')
+        setLoggedOut(true)
+        setUser(null)
+        successfulNotification('account successfully deleted')
     }
 
     if(redirect) {
