@@ -27,7 +27,7 @@ import SuccessPage from './Pages/SuccessPage';
 import NotFoundPage from './Pages/NotFoundPage';
 import UnsuccessfulPage from './Pages/UnsuccessfulPage';
 
-axios.defaults.baseURL = 'http://healhub-api.onrender.com'
+axios.defaults.baseURL = 'https://doctor-appointment-application-j6lk.onrender.com'
 axios.defaults.withCredentials = true
 const token = localStorage.getItem('token')
 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
