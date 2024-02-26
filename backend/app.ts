@@ -24,7 +24,7 @@ import doctorAuthMiddleware from './middleware/doctorAuthentication'
 import patientAuthMiddleware from './middleware/patientAuthentication'
 
 //middleware
-app.use(cors({credentials: true, origin: 'https://healhub.onrender.com'}));
+app.use(cors({credentials: true, origin: 'https://healhub-ug2z.onrender.com'}));
 app.use('/stripe/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use(cookieParser())
