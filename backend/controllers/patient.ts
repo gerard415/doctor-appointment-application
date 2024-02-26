@@ -20,40 +20,45 @@ type MyToken = {
 }
 
 const getPatient = async (req: Request, res: Response) => {
-    const {token} = req.cookies
+    const token = req.headers.authorization?.split(' ')[1]
 
-    if(token) {
+    if(token && token !== 'null') {
         const {patientId} = jwt.verify(token, SECRET) as MyToken
         const {name, email, phone, gender, bloodtype, _id:id} = await Patient.findById(patientId) as patientType
         res.status(StatusCodes.OK).json({name, email, phone, gender, bloodtype, _id:id})
     }else{
-        res.json(null)
+        throw new UnauthenticatedError('You are not signed in')
     }
 }
 
 const editPatient = async (req: Request, res: Response) => {
-    const {token} = req.cookies
+    const token = req.headers.authorization?.split(' ')[1]
     const {name, bloodtype, phone, photo} = req.body
 
     if(name === ''){
         throw new BadRequestError('Field cannot be empty')
     }
 
-    if(token){
+    if(token && token !== 'null'){
         const {patientId} = jwt.verify(token, SECRET) as MyToken
         const user = await Patient.findOneAndUpdate({_id: patientId}, {name, bloodtype, phone, photo}, {new:true, runValidators:true})
         user?.save()
         // const {name, email, phone, role, appointments, _id:id, bloodtype, photo} = user as patientType
         res.status(StatusCodes.OK).json(user)
+    }else{
+        throw new UnauthenticatedError('You are not signed in')
     }
 }
 
 const deletePatient = async (req: Request, res: Response) => {
-    const {token} = req.cookies
-    if(token){
+    const token = req.headers.authorization?.split(' ')[1]
+    
+    if(token && token !== 'null'){
         const {patientId} = jwt.verify(token, SECRET) as MyToken
         await Patient.findByIdAndDelete(patientId)
         res.status(StatusCodes.OK).json('user successfully deleted')
+    }else{
+        throw new UnauthenticatedError('You are not signed in')
     }
 }
 

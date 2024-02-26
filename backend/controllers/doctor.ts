@@ -26,14 +26,14 @@ const getDoctor = async (req: Request, res: Response) => {
 }
 
 const getDoctorProfile = async (req: Request, res: Response) => {
-    const {token} = req.cookies
+    const token = req.headers.authorization?.split(' ')[1]
 
-    if(token) {
+    if(token && token !== 'null') {
         const {doctorId} = jwt.verify(token, SECRET) as MyToken
         const {name, email, phone, gender, photo, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id, appointments} = await Doctor.findById(doctorId) as doctorType
         res.status(StatusCodes.OK).json({name, email, phone, gender, photo, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, appointments, _id:id})
     }else{
-        res.json(null)
+        throw new UnauthenticatedError('You are not signed in')
     }
 }
 
@@ -43,25 +43,30 @@ const getAllDoctors = async (req: Request, res: Response) => {
 }
 
 const editDoctor = async (req: Request, res: Response) => {
-    const {token} = req.cookies
+    const token = req.headers.authorization?.split(' ')[1]
 
     const {name, phone, bio, gender, specialization, qualifications, experiences, about, photo, isApproved} = req.body
 
-    if(token){
+    if(token && token !== 'null'){
         const {doctorId} = jwt.verify(token, SECRET) as MyToken
         const user = await Doctor.findOneAndUpdate({_id: doctorId}, {name, phone, bio, gender, specialization, qualifications, experiences, about, photo, isApproved}, {new:true, runValidators:true})
         user?.save()
         // const {name, email, phone, gender, ticketPrice, specialization, qualifications, experiences, bio, about, averageRating, totalRatings, _id:id, appointments} = user as doctorType
         res.status(StatusCodes.OK).json(user)
+    }else{
+        throw new UnauthenticatedError('You are not signed in')
     }
 }
 
 const deleteDoctor = async (req: Request, res: Response) => {
-    const {token} = req.cookies
-    if(token){
+    const token = req.headers.authorization?.split(' ')[1]
+
+    if(token && token !== 'null'){
         const {doctorId} = jwt.verify(token, SECRET) as MyToken
         await Doctor.findByIdAndDelete(doctorId)
         res.status(StatusCodes.OK).json('user successfully deleted')
+    }else{
+        throw new UnauthenticatedError('You are not signed in')
     }
 }
 

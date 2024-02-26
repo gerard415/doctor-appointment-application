@@ -14,16 +14,22 @@ type MyToken = {
 const SECRET: Secret = process.env.DOCTOR_SECRET!
 
 const doctorAuthMiddleware = async (req: MyUserRequest, res: Response, next:NextFunction) => {
-    const {token} = req.cookies
+    const token = req.headers.authorization?.split(' ')[1]
 
-    const {doctorId, name} = jwt.verify(token, SECRET) as MyToken
-    req.user = {doctorId, name}  
+    if(token && token !== 'null'){
+        const {doctorId, name} = jwt.verify(token, SECRET) as MyToken
+        req.user = {doctorId, name}  
 
-    if(!doctorId){
-        throw new UnauthenticatedError('Not authorized to access this route')
+        if(!doctorId){
+            throw new UnauthenticatedError('Not authorized to access this route')
+        }else{
+            next()
+        }
     }else{
-        next()
+        throw new UnauthenticatedError('You are not signed in')
     }
+
+    
 }
 
 export = doctorAuthMiddleware

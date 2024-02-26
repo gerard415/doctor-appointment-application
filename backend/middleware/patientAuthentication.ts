@@ -14,16 +14,22 @@ type MyToken = {
 const SECRET: Secret = process.env.PATIENT_SECRET!
 
 const patientAuthMiddleware = async (req: MyUserRequest, res: Response, next:NextFunction) => {
-    const {token} = req.cookies
+    const token = req.headers.authorization?.split(' ')[1]
 
-    const {patientId, name} = jwt.verify(token, SECRET) as MyToken
-    req.user = {patientId, name}  
+    if(token && token !== 'null'){
+        const {patientId, name} = jwt.verify(token, SECRET) as MyToken
+        req.user = {patientId, name}  
 
-    if(!patientId){
-        throw new UnauthenticatedError('Not authorized to access this route')
+        if(!patientId){
+            throw new UnauthenticatedError('Not authorized to access this route')
+        }else{
+            next()
+        }
     }else{
-        next()
+        throw new UnauthenticatedError('You are not signed in')
     }
+
+    
 }
 
 export default patientAuthMiddleware

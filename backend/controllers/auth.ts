@@ -31,14 +31,14 @@ const register  = async (req:Request, res:Response) => {
         const patient:patientType = await Patient.create({...req.body})
 
         const token = patient.createJWT()
-        res.status(StatusCodes.CREATED).cookie('token', token).json({ name: patient.name, email: patient.email, role: patient.role})
+        res.status(StatusCodes.CREATED).json({user: { name: patient.name, email: patient.email, role: patient.role}, token: token})
     }
 
     if(role === 'doctor'){
         const doctor:doctorType = await Doctor.create({...req.body})
 
         const token = doctor.createJWT()
-        res.status(StatusCodes.CREATED).cookie('token', token).json({ name: doctor.name, email: doctor.email, role: doctor.role})
+        res.status(StatusCodes.CREATED).json({user: { name: doctor.name, email: doctor.email, role: doctor.role}, token: token})
     }
 }
 
@@ -77,11 +77,11 @@ const login  = async (req:Request, res:Response) => {
     const token = user.createJWT()
     
     if(user === patient){
-        res.status(StatusCodes.OK).cookie('token', token).json({ name: user.name, email: user.email, role: user.role, id:user._id, phone: user.phone, bloodtype: patient?.bloodtype})
+        res.status(StatusCodes.OK).json({user: { name: user.name, email: user.email, role: user.role, id:user._id, phone: user.phone, bloodtype: patient?.bloodtype}, token: token})
     }
 
     if(user === doctor){
-        res.status(StatusCodes.OK).cookie('token', token).json({ name: user.name, email: user.email, role: user.role, id:user._id, phone: user.phone})
+        res.status(StatusCodes.OK).json({user: { name: user.name, email: user.email, role: user.role, id:user._id, phone: user.phone}, token: token})
     }
     
 }
@@ -91,9 +91,9 @@ const logout  = async (req:Request, res:Response) => {
 }
 
 const getUser  = async (req:Request, res:Response) => {
-    const {token} = req.cookies
+    const token = req.headers.authorization?.split(' ')[1]
 
-    if(token) {
+    if(token && token !== 'null') {
         const decoded = jwt.verify(token, SECRET) as Token
 
         if('patientId' in decoded){
@@ -109,7 +109,7 @@ const getUser  = async (req:Request, res:Response) => {
         }
 
     }else{
-        res.json(null)
+        throw new UnauthenticatedError('You are not signed in')
     }
 }
 
