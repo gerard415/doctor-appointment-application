@@ -21,7 +21,10 @@ const RegisterPage= () => {
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         try {
-            await axios.post('/auth/register', {name: `${firstname}` + ` ${lastname}`, email, password, role, gender})
+            const {data} = await axios.post('/auth/register', {name: `${firstname}` + ` ${lastname}`, email, password, role, gender})
+            localStorage.setItem('token', data.token)
+            axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
+            
             setUpdateUser(prev => !prev)
             successfulNotification('registration successful')
             setRedirect(true)

@@ -32,6 +32,7 @@ const DoctorProfileLayout = () => {
 
     const handleLogout = async () => {
         await axios.post('/auth/logout')
+        localStorage.removeItem('token')
         setUpdateUser(prev => !prev)
         setRedirect(true)
         successfulNotification('logout successful')

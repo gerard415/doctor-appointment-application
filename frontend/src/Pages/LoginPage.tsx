@@ -17,7 +17,10 @@ const LoginPage = () => {
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
-            await axios.post('/auth/login', {email,password})
+            const {data} = await axios.post('/auth/login', {email,password})
+            localStorage.setItem('token', data.token)
+            axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`
+            
             setUpdateUser(prev => !prev)
             successfulNotification('login successful')
             setRedirect(true)
