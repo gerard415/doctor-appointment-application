@@ -110,6 +110,7 @@ const getUser  = async (req:Request, res:Response) => {
 
     }else{
         throw new UnauthenticatedError('You are not signed in')
+        res.json(null)
     }
 }
 
