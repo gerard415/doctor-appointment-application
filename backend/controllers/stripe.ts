@@ -60,8 +60,8 @@ export const checkOut = async (req:MyUserRequest, res:Response) => {
             mode: 'payment',
             customer: customer.id,
             client_reference_id: doctorId,
-            success_url: 'http://localhost:3000/success-page',
-            cancel_url: 'http://localhost:3000/unsuccessful-page',
+            success_url: 'https://healhub.onrender.com/success-page',
+            cancel_url: 'https://healhub.onrender.com/unsuccessful-page',
         });
 
         res.status(StatusCodes.CREATED).json({session})
@@ -113,7 +113,7 @@ export const webhook = (req: Request, res: Response) => {
     let sig = req.headers['stripe-signature'];
 
     // This is your Stripe CLI webhook secret for testing your endpoint locally.
-    endpointSecret = "whsec_3b5dd71554f5ec687548c3e78aad2d6264b790b57ec4f507e9d0c8f1f4a0c3d1";
+    endpointSecret = process.env.STRIPE_END_POINT_SECRET!
 
     try {
         event = stripe.webhooks.constructEvent(req.body, sig!, endpointSecret)

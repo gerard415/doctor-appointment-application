@@ -10,8 +10,6 @@ const app:Application = express()
 
 import connectDB from './db/connect'
 
-
-
 //routers
 import authRouter from './routes/auth'
 import patientRouter from './routes/patient'
@@ -26,11 +24,10 @@ import doctorAuthMiddleware from './middleware/doctorAuthentication'
 import patientAuthMiddleware from './middleware/patientAuthentication'
 
 //middleware
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(cors({credentials: true, origin: 'https://healhub.onrender.com'}));
 app.use('/stripe/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
 app.use(cookieParser())
-app.use('/uploads', express.static('C:/Users/gerar/Programming/typescript/doctor-appointment-application/backend' + '/uploads'))
 app.use(express.urlencoded({ extended: true }));
 
 //routes
