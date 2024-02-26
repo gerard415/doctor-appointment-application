@@ -33,6 +33,7 @@ const ProfilePageLayout = () => {
         await axios.post('/auth/logout')
         localStorage.removeItem('token')
         setUpdateUser(prev => !prev)
+        console.log(user)
         setRedirect(true)
     }
 
