@@ -108,7 +108,7 @@ const SingleDoctorPageLayout = () => {
             <div className=' md:w-[300px] h-full space-y-5 p-2 pt-4 pb-4 shadow-2xl '>
                 <div className='flex justify-between'>
                     <p className='text-[13px] text-gray-500 '>Ticket Price</p>
-                    <p className=' text-[15px] font-bold '>700 BDT</p>
+                    <p className=' text-[15px] font-bold '>70$</p>
                 </div>
                 <div className='space-y-2'>
                         <BookingComponent 
