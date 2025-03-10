@@ -60,8 +60,8 @@ export const checkOut = async (req:MyUserRequest, res:Response) => {
             mode: 'payment',
             customer: customer.id,
             client_reference_id: doctorId,
-            success_url: 'https://healhub.onrender.com/success-page',
-            cancel_url: 'https://healhub.onrender.com/unsuccessful-page',
+            success_url: 'https://healhub-ug2z.onrender.com/success-page',
+            cancel_url: 'https://healhub-ug2z.onrender.com/unsuccessful-page',
         });
 
         res.status(StatusCodes.CREATED).json({session})
