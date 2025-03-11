@@ -95,6 +95,7 @@ const createAppointment = async (customer: Stripe.Response<Stripe.Customer>) => 
                 }
             },{new:true})
         patient?.save()
+        console.log(appointment)
     } catch (error) {
         console.log(error)
     }
