@@ -42,7 +42,7 @@ const DoctorProfileAppointmentPage = () => {
                     <p className='w-[25%]'>{item.name}</p>
                     <p className='w-[17.5%]' >{item.gender}</p>
                     <p className='w-[17.5%]'>{item.status}</p>
-                    <p className='w-[30%]' >{moment(dayjs(item.bookedOn).toDate()).format('MMMM Do YYYY')}</p>
+                    <p className='w-[30%]' >{moment.utc(dayjs(item.bookedOn).toDate()).format('MMMM Do YYYY')}</p>
                     <p className='w-[10%]'>{showTime(item.time)}</p>
                 </div>
           ))
