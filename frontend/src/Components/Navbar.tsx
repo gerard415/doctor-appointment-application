@@ -20,7 +20,7 @@ const Navbar = () => {
     <div className='w-full pt-2 sm:pt-3'>
       <div className=' flex justify-between items-center w-full '>
         <Link to={'/'} className='text-[13px] phone:text-[16px]'>
-            Medicare
+            HealthHub
         </Link>
         <div className='space-x-7 text-[11px] md:text-[13px] hidden sm:inline'>
           <Link to={'/'}>Home</Link>
