@@ -6,7 +6,7 @@ const Footer = () => {
         <div className=" mx-auto ">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div>
-                <p>Medicare</p>
+                <p>HealthHub</p>
                 <p className="max-w-xs mt-4 text-sm text-gray-600">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, accusantium.
                 </p>
@@ -89,7 +89,7 @@ const Footer = () => {
             </div>
             </div>
             <p className="mt-8 text-xs text-gray-800">
-            © 2022 Medicare
+            © 2022 HealthHub
             </p>
         </div>
     </footer>

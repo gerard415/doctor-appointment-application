@@ -12,7 +12,7 @@ const DoctorCard = ({doctor}: doctorCardType) => {
   return (
     <div className='middle:w-[200px] galaxyfold:w-full space-y-4'>
         <div className=' '>
-            <img src={image} alt="" className='middle:w-[200px] galaxyfold:w-full h-[250px]  rounded-xl ' />
+            <img src={doctor.photo || image} alt="" className='middle:w-[200px] galaxyfold:w-full h-[250px]  rounded-xl ' />
         </div>
         <div className='space-y-2'>
             <p className='font-bold middle:text-[17px] text-[13px] '>Dr . {doctor.name}</p>
