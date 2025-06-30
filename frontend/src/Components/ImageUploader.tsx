@@ -16,8 +16,8 @@ const ImageUploader = ({photo, setPhoto}: ImageUploaderProps) => {
         }
 
         setUploading(true)
-        const formData = new FormData()
-        formData.append('photo', files[0])
+        const formData = new FormData();
+        formData.append('photo', files[0]);
 
         try {
             const {data} = await axios.post('/auth/upload', formData, {
@@ -35,7 +35,16 @@ const ImageUploader = ({photo, setPhoto}: ImageUploaderProps) => {
     return (
         <div>
             <label className='p-2 bg-gray-200 rounded-md opacity-75 text-[12px] hover:cursor-pointer'>
-                <input onChange={(e) => handleImageUpload(e, e.target.files)} type="file" name='photo' className='hidden p-2 bg-gray-200 rounded-md opacity-75 text-[12px] ' placeholder='Upload'/>
+                <input
+                    onChange={(e) => {
+                        console.log('File selected:', e.target.files?.[0]);
+                        handleImageUpload(e, e.target.files);
+                    }}
+                    type="file"
+                    name="photo"
+                    className="hidden p-2 bg-gray-200 rounded-md opacity-75 text-[12px]"
+                    placeholder="Upload"
+                />
                 Upload Photo
             </label> 
         </div>

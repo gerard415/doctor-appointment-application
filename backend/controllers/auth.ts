@@ -7,6 +7,7 @@ import UnauthenticatedError from '../errors/unauthenticated'
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
 import { fileSizeFormatter } from '../utils/multer'
 import cloudinary from '../utils/cloudinary'
+import streamifier from 'streamifier';
 
 
 type Token = {
@@ -114,29 +115,42 @@ const getUser  = async (req:Request, res:Response) => {
     }
 }
 
-const upload = async (req:Request, res:Response) => {
-    let fileData = {};
-    if (req.file) {
-    // Save image to cloudinary
-    let uploadedFile 
-        try {
-            const localFilePath = req.file.path
-            uploadedFile = await cloudinary.uploader.upload(localFilePath, {
-                folder: "products",
-                resource_type: "image",
-            })
 
-            fileData = {
-                fileName: req.file.originalname,
-                filePath: uploadedFile.secure_url,
-            }
-        } catch (error) {
-            res.status(500);
-            throw new Error('Image could not be Uploaded');
-        }
-    }
-    res.json(fileData) 
-}
+const upload = async (req: Request, res: Response) => {
+  if (!req.file || !req.file.buffer) {
+    return res.status(400).json({ error: 'No file uploaded or buffer missing' });
+  }
+
+  try {
+    const streamUpload = () => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'products',
+            resource_type: 'image',
+          },
+          (error, result) => {
+            if (result) resolve(result);
+            else reject(error);
+          }
+        );
+        streamifier.createReadStream(req.file!.buffer).pipe(stream);
+      });
+    };
+
+    const uploadedFile: any = await streamUpload();
+
+    const fileData = {
+      fileName: req.file.originalname,
+      filePath: uploadedFile.secure_url,
+    };
+
+    res.status(200).json(fileData);
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ error: 'Image could not be uploaded' });
+  }
+};
 
 
 export {register, login, logout, getUser, upload}
